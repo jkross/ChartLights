@@ -11,7 +11,7 @@ const int oePin = 3;      // connected to ~OE of TLC5916
 #define PWM_PCT_ACT_LOW(_PCT) ((int)255*(1-(_PCT/100.0)))
 #define PWM_PCT 10
 
-#define NUM_BANKS 2       // number of drivers
+#define NUM_BANKS 5       // number of drivers
 #define LEDS_PER_BANK 8
 byte datArray[][NUM_BANKS] = {{0x0, 0x0},
   {0x1, 0x0},
@@ -47,10 +47,10 @@ void loop()
 // new variable through the loop hangs after 3 iterations - looks like memory isn't being freed
 //      auto cnt = new perfStat<100>();
       cnt->init();
-      do {
+      do {  // 232us avg w/ 2, 562us w/ 5
         cnt->start();
         //digitalWrite(oePin,HIGH); // disable LEDs and don't let driver switch to non-standard mode
-        for (int bank = 1; bank >= 0; bank--)
+        for (int bank = NUM_BANKS-1; bank >= 0; bank--)
         {
           //dPrint(sample, bank);
           shiftOut(dataPin, clockPin, MSBFIRST, datArray[sample][bank]);
