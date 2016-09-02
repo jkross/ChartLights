@@ -40,30 +40,33 @@ void setup ()
 
 void loop()
 {
-  //loop through all samples
-  for (int sample = 0; sample < NUM_SAMPLES; sample++)
-  {
+  for (int j = 10; j <= 100; j += 90) {
+    analogWrite(oePin, PWM_PCT_ACT_LOW(j));
+    //loop through all samples
+    for (int sample = 0; sample < NUM_SAMPLES; sample++)
     {
-// new variable through the loop hangs after 3 iterations - looks like memory isn't being freed
-//      auto cnt = new perfStat<100>();
-      cnt->init();
-      do {  // 232us avg w/ 2, 562us w/ 5
-        cnt->start();
-        //digitalWrite(oePin,HIGH); // disable LEDs and don't let driver switch to non-standard mode
-        for (int bank = NUM_BANKS-1; bank >= 0; bank--)
-        {
-          //dPrint(sample, bank);
-          shiftOut(dataPin, clockPin, MSBFIRST, datArray[sample][bank]);
-        }
-        // toggle latch pin to latch data from shift register to output drivers
-        digitalWrite(latchPin, HIGH);
-        digitalWrite(latchPin, LOW);
-        // set ~OE according to PWM percentage
-        //analogWrite(oePin, PWM_PCT_ACT_LOW(PWM_PCT));
-      } while (!(cnt->stop()));
-      cnt->compute();
+      {
+        // new variable through the loop hangs after 3 iterations - looks like memory isn't being freed
+        //      auto cnt = new perfStat<100>();
+        cnt->init();
+        do {  // 232us avg w/ 2, 562us w/ 5
+          cnt->start();
+          //digitalWrite(oePin,HIGH); // disable LEDs and don't let driver switch to non-standard mode
+          for (int bank = NUM_BANKS - 1; bank >= 0; bank--)
+          {
+            //dPrint(sample, bank);
+            shiftOut(dataPin, clockPin, MSBFIRST, datArray[sample][bank]);
+          }
+          // toggle latch pin to latch data from shift register to output drivers
+          digitalWrite(latchPin, HIGH);
+          digitalWrite(latchPin, LOW);
+          // set ~OE according to PWM percentage
+          //analogWrite(oePin, PWM_PCT_ACT_LOW(PWM_PCT));
+        } while (!(cnt->stop()));
+        cnt->compute();
+      }
+      delay(DELAY);
     }
-    delay(DELAY);
   }
 }
 
