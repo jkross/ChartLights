@@ -57,8 +57,8 @@ function getInRange($areaFile, $chartFile, $chartNum)
 {
 	$bb = getBB $chartFile $chartNum;
 	[xml]$areaXml = gc $areaFile;
-	# $areaXml.root.dataroot.Vol_x0020_2_x0020_D5_x0020_LL_x0020_corr_x0020_thru | % {
-	$areaXml.root.dataroot.Vol_x0020_6_x0020_D13_x0020_LL_x0020_corr_x0020_thru | % {
+	$areaXml.root.dataroot.Vol_x0020_2_x0020_D5_x0020_LL_x0020_corr_x0020_thru | % {
+	# $areaXml.root.dataroot.Vol_x0020_6_x0020_D13_x0020_LL_x0020_corr_x0020_thru | % {
 		$llat = ParseLatLon($_.Position_x0020__x0028_Latitude_x0029_);
 		$llon = ParseLatLon($_.Position_x0020__x0028_Longitude_x0029_);
 		nno @{lat = $llat; lon = $llon; v=$_}
@@ -80,14 +80,17 @@ function AddDistance($light, $places)
 		$llat = ParseLatLon($light.Position_x0020__x0028_Latitude_x0029_);
 		$llon = ParseLatLon($light.Position_x0020__x0028_Longitude_x0029_);
 		$drange = $light.Range / 1.0;
-		$light | add-member -force -notepropertymembers @{drange=$drange;dlat=$llat;dlon=$llon}
+		$light | add-member -force -notepropertymembers @{drange=$drange;dlat=$llat;dlon=$llon};
+		$minDist = 99999999;
 		$places.places.place | % { 
 			$name = "D_to_" + $_.name; 
 			$plat = ParseLatLon($_.loc.lat);
 			$plon = ParseLatLon($_.loc.lon);
 			$dist = [math]::sqrt([math]::pow(($llat - $plat),2) + [math]::pow(($llon - $plon),2));
+			if ($dist -lt $minDist) { $minDist = $dist };
 			$light | add-member -force -notepropertymembers @{$name=$dist}
 		}
+		$light | add-member -force -notepropertymembers @{minDist=$minDist}
 		$light
 }
 
@@ -95,7 +98,7 @@ function LightSort($inRange, $placeFile)
 {
 	[xml]$places = gc $placefile;
 	$inRange | % { AddDistance $_ $places } |
-		sort -Property @{Expression="drange"; Descending=$true},@{Expression="D_to_Driftmier";Descending=$false} 
+		sort -Property @{Expression="drange"; Descending=$true},@{Expression="minDist";Descending=$false} 
 }
 
 # $ir = getInRange <areafile> <chartfile> <chartnum>
