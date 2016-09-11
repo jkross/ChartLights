@@ -5944,6 +5944,8 @@
 <wire x1="0" y1="63.5" x2="72.39" y2="63.5" width="1.016" layer="20"/>
 <wire x1="72.39" y1="63.5" x2="72.39" y2="0" width="1.016" layer="20"/>
 <wire x1="72.39" y1="0" x2="0" y2="0" width="1.016" layer="20"/>
+<dimension x1="0" y1="0" x2="0" y2="63.5" x3="-7.62" y3="31.75" textsize="1.778" layer="20"/>
+<dimension x1="0" y1="0" x2="72.39" y2="0" x3="36.195" y3="-5.08" textsize="1.778" layer="20"/>
 </plain>
 <libraries>
 <library name="SparkFun-Boards">
