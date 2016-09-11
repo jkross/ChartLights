@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+
+# Swap file from VIM 
+*.swp
