@@ -1,17 +1,10 @@
 // Cascaded TLC5916 drivers
 
-
 #include "perfStat.h"
 #include "morse.h"
 
-
-
-
-
-
 // Timing delay for test loop
 #define DELAY 1000
-
 
 perfStat<100> *cnt;
 
@@ -20,8 +13,6 @@ using namespace std;
 #include <pnew.cpp>
 #include <iterator>
 #include <queue>
-
-
 
 typedef unsigned long ticks_t;
 const ticks_t HalfWrap = ~((ticks_t)0) >> 1;
@@ -184,6 +175,7 @@ class ledData {
     }
 
     void setPwm(int pwmPct) {
+      // value will be used next writeData() call
       _pwmPct = pwmPct;
     }
 
@@ -214,11 +206,6 @@ class ledData {
 
 #define NUM_SAMPLES 2
 ledData datArray[NUM_SAMPLES];
-//byte datArray[][NUM_BANKS] = {{0x0, 0x0, 0x0, 0x0, 0x0},
-//  {0xaa, 0xaa, 0xaa, 0xaa, 0xaa},
-//  {0x55, 0x55, 0x55, 0x55, 0x55},
-//};
-//#define NUM_SAMPLES (sizeof(datArray)/sizeof(datArray[0]))
 
 void loop()
 {
@@ -227,20 +214,11 @@ void loop()
       datArray[sample].set(bit, 1);
     }
   }
-  for (int j=10; j <= 50; j+=40) {
+  for (int j = 50; j <= 50; j += 40) {
     //loop through all samples
-    for (int sample = 0; sample < NUM_SAMPLES; sample++)
-    {
+    for (int sample = 0; sample < NUM_SAMPLES; sample++) {
       datArray[sample].setPwm(j);
       datArray[sample].writeData();
-//      {
-//        cnt->init();
-//        do {  // 232us avg w/ 2, 562us w/ 5
-//          cnt->start();
-//          datArray[sample].writeData();
-//        } while (false /* !(cnt->stop())*/);
-//        cnt->compute();
-//      }
       delay(DELAY);
     }
   }
