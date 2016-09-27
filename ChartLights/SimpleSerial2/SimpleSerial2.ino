@@ -1,5 +1,7 @@
 // Cascaded TLC5916 drivers
 
+
+#include <RTClib.h>
 #include "perfStat.h"
 #include "morse.h"
 #include "patterns.h"
@@ -16,7 +18,6 @@
 #include "scheduler.h"
 
 globalTime gTime;
-
 
 
 void doTimers() {
@@ -41,86 +42,97 @@ void doTimers() {
   }
 }
 
-void setup ()
-{
-  //set pins to output
-  Serial.begin(57600);
-  // cnt = new perfStat<100>();
-
-  doTimers();
-
-}
-
 class ledDriver {
-  private:
-    static const int NUM_BANKS = 5;
-    const int LEDS_PER_BANK = 8;
-    const int latchPin = 12;  // connected to LE  of TLC5916
-    const int clockPin = 8;   // connected to CLK of TLC5916
-    const int dataPin = 11;   // connected to SDI of TLC5916
-    const int oePin = 3;      // connected to ~OE of TLC5916
+private:
+	static const int NUM_BANKS = 5;
+	const int LEDS_PER_BANK = 8;
+	const int latchPin = 12;  // connected to LE  of TLC5916
+	const int clockPin = 8;   // connected to CLK of TLC5916
+	const int dataPin = 11;   // connected to SDI of TLC5916
+	const int oePin = 3;      // connected to ~OE of TLC5916
 
-    // Since ~OE is active low we calcuate our PWM percent as the inverse %
+							  // Since ~OE is active low we calcuate our PWM percent as the inverse %
 #define PWM_PCT_ACT_LOW(_PCT) ((int)255*(1-(_PCT/100.0)))
 #define PWM_PCT 10
 
-    byte _data[NUM_BANKS];
-    int  _pwmPct;
-  public:
-    ledDriver() {
-      for (int i = 0; i < NUM_BANKS; i++) {
-        _data[i] = 0;
-      }
-      _pwmPct = PWM_PCT;
-      pinMode(latchPin, OUTPUT);
-      pinMode(clockPin, OUTPUT);
-      pinMode(dataPin, OUTPUT);
-      pinMode(oePin, OUTPUT);
-      digitalWrite(latchPin, LOW);
-      analogWrite(oePin, PWM_PCT_ACT_LOW(PWM_PCT));
-    }
+	byte _data[NUM_BANKS];
+	int  _pwmPct;
+public:
+	ledDriver() {
+		for (int i = 0; i < NUM_BANKS; i++) {
+			_data[i] = 0;
+		}
+		_pwmPct = PWM_PCT;
+		pinMode(latchPin, OUTPUT);
+		pinMode(clockPin, OUTPUT);
+		pinMode(dataPin, OUTPUT);
+		pinMode(oePin, OUTPUT);
+		digitalWrite(latchPin, LOW);
+		analogWrite(oePin, PWM_PCT_ACT_LOW(PWM_PCT));
+	}
 
-    void setPwm(int pwmPct) {
-      // value will be used next writeData() call
-      _pwmPct = pwmPct;
-    }
+	void setPwm(int pwmPct) {
+		// value will be used next writeData() call
+		_pwmPct = pwmPct;
+	}
 
-    void writeData() {
-      // disable LEDs and don't let driver switch to non-standard mode
-      digitalWrite(oePin, HIGH);
-      for (int bank = NUM_BANKS - 1; bank >= 0; bank--)
-      {
-        shiftOut(dataPin, clockPin, MSBFIRST, _data[bank]);
-      }
-      // toggle latch pin to latch data from shift register to output drivers
-      digitalWrite(latchPin, HIGH);
-      digitalWrite(latchPin, LOW);
-      // set ~OE according to PWM percentage
-      analogWrite(oePin, PWM_PCT_ACT_LOW(_pwmPct));
-    }
+	void writeData() {
+		// disable LEDs and don't let driver switch to non-standard mode
+		digitalWrite(oePin, HIGH);
+		for (int bank = NUM_BANKS - 1; bank >= 0; bank--)
+		{
+			shiftOut(dataPin, clockPin, MSBFIRST, _data[bank]);
+		}
+		// toggle latch pin to latch data from shift register to output drivers
+		digitalWrite(latchPin, HIGH);
+		digitalWrite(latchPin, LOW);
+		// set ~OE according to PWM percentage
+		analogWrite(oePin, PWM_PCT_ACT_LOW(_pwmPct));
+	}
 
-    void set(int i, bool val) {
-      int bank = i / LEDS_PER_BANK;
-      int bit  = i % LEDS_PER_BANK;
-      if (val) {
-        _data[bank] |= 1 << bit;
-      } else {
-        _data[bank] &= ~(1 << bit);
-      }
-    }
+	void set(int i, bool val) {
+		int bank = i / LEDS_PER_BANK;
+		int bit = i % LEDS_PER_BANK;
+		if (val) {
+			_data[bank] |= 1 << bit;
+		}
+		else {
+			_data[bank] &= ~(1 << bit);
+		}
+	}
 };
 
 #define NUM_SAMPLES 2
 ledDriver datArray[NUM_SAMPLES];
 
+#include "rtc.h"
+
+rtc* realTime;
+
+void setup ()
+{
+  Serial.begin(57600);
+  // cnt = new perfStat<100>();
+
+  doTimers();
+
+  realTime = new rtc();
+  realTime->setup();
+  realTime->test();
+
+  for (int sample = 0; sample < NUM_SAMPLES; sample++) {
+	  for (int bit = sample; bit < 40; bit += 2) {
+		  datArray[sample].set(bit, 1);
+	  }
+  }
+}
+
+
+
 void loop()
 {
-  for (int sample = 0; sample < NUM_SAMPLES; sample++) {
-    for (int bit = sample; bit < 40; bit += 2) {
-      datArray[sample].set(bit, 1);
-    }
-  }
-  for (int j = 20; j <= 20; j += 40) {  //350mA @ 20%, 50% too high for wall plug
+
+  for (int j = 2; j <= 2; j += 40) {  //350mA @ 20%, 50% too high for wall plug
     //loop through all samples
     for (int sample = 0; sample < NUM_SAMPLES; sample++) {
       datArray[sample].setPwm(j);
