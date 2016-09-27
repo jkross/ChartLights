@@ -1,6 +1,9 @@
 // Cascaded TLC5916 drivers
 
+
 #include "perfStat.h"
+#include "morse.h"
+
 
 const int latchPin = 12;  // connected to LE  of TLC5916
 const int clockPin = 8;   // connected to CLK of TLC5916
@@ -25,6 +28,135 @@ byte datArray[][NUM_BANKS] = {{0x0, 0x0, 0x0, 0x0, 0x0},
 
 perfStat<100> *cnt;
 
+//#include <iostream>
+using namespace std;
+#include <pnew.cpp>
+#include <iterator>
+#include <queue>
+
+
+
+typedef unsigned long ticks_t;
+const ticks_t HalfWrap = ~((ticks_t)0) >> 1;
+
+class globalTime {
+private:
+  ticks_t _now;
+
+public:
+  globalTime() {
+    set(0);
+  }
+
+  void set(ticks_t now) {
+    _now = now;
+  }
+
+  ticks_t get() {
+    return _now;
+  }
+};
+
+static globalTime gTime;
+
+class timer {
+public:
+
+  ticks_t ticks;
+
+  void invoke(ticks_t now)
+  {
+    // cout << "callback: " << ticks << endl;
+    Serial.print("callback: ");
+    Serial.print(ticks, HEX);
+    Serial.println();
+    //Serial.println(ticks, HEX);
+  }
+
+  ticks_t remaining(ticks_t now)
+  {
+    return (ticks - now);
+  }
+
+  bool operator <(const timer& other) const
+  {
+    return (other.ticks - gTime.get()) < (ticks - gTime.get());
+  }
+
+  timer(int i)
+  {
+    ticks = i;
+  }
+
+  timer() {
+    ticks = 0;
+  }
+};
+
+class timers {
+  priority_queue<timer> timerList;
+
+public:
+  void schedule(timer t)
+  {
+    timerList.push(t);
+  }
+
+  bool empty()
+  {
+    return timerList.empty();
+  }
+
+  bool expired(ticks_t now, timer t) 
+  {
+    ticks_t remaining = t.remaining(now);
+    bool ret = (remaining -1) > HalfWrap;
+    return ret;
+  }
+
+  void dispatch(ticks_t now)
+  {
+    do {
+      timer top = timerList.top();
+      if (!expired(now, top))
+        break;
+      timerList.pop();
+      top.invoke(now);
+    } while (!timerList.empty());
+  }
+
+  //void dumpDestructive()
+  //{
+  //  while (!timerList.empty()) {
+  //    unsigned long long i = timerList.top().ticks;
+  //    timerList.pop();
+  //    cout << i << endl;
+  //  }
+  //}
+};
+
+void doTimers() {
+    
+  timers timers;
+  gTime.set(((ticks_t)2));
+  timers.schedule(3);
+  timers.schedule(10); 
+  timers.schedule(3); 
+  timers.schedule(1); 
+  timers.schedule(-1);
+
+  ticks_t now = gTime.get();
+  while (!timers.empty())
+  {
+    // cout << "now: " << now << endl;
+    Serial.print("now: ");
+    Serial.print(now, HEX);
+    Serial.println();
+    timers.dispatch(now);
+    gTime.set(now++);
+  }
+}
+
 void setup ()
 {
   //set pins to output
@@ -36,6 +168,9 @@ void setup ()
   digitalWrite(latchPin, LOW);
   analogWrite(oePin, PWM_PCT_ACT_LOW(PWM_PCT));
   cnt = new perfStat<100>();
+
+  doTimers();
+
 }
 
 void loop()
@@ -46,8 +181,6 @@ void loop()
     for (int sample = 0; sample < NUM_SAMPLES; sample++)
     {
       {
-        // new variable through the loop hangs after 3 iterations - looks like memory isn't being freed
-        //      auto cnt = new perfStat<100>();
         cnt->init();
         do {  // 232us avg w/ 2, 562us w/ 5
           cnt->start();
@@ -70,13 +203,4 @@ void loop()
   }
 }
 
-void dPrint(int sample, int bank)
-{
-  Serial.print("sample: ");
-  Serial.print(sample, DEC);
-  Serial.print(" bank: ");
-  Serial.print(bank, DEC);
-  Serial.print(" ");
-  Serial.print(datArray[sample][bank], DEC);
-  Serial.println();
-}
+
