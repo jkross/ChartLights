@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include "scheduler.h"
 #include <pnew.cpp>
 
@@ -42,3 +43,28 @@ scheduler::dispatch(ticks_t now)
 //    cout << i << endl;
 //  }
 //}
+
+#include "globalTime.h"
+globalTime gTime;
+
+void 
+scheduler::testTimers() {
+
+	gTime.set(((ticks_t)2));
+	schedule(3);
+	schedule(10);
+	schedule(3);
+	schedule(1);
+	schedule(-1);
+
+	ticks_t now = gTime.get();
+	while (!empty())
+	{
+		// cout << "now: " << now << endl;
+		Serial.print("now: ");
+		Serial.print(now, HEX);
+		Serial.println();
+		dispatch(now);
+		gTime.set(now++);
+	}
+}

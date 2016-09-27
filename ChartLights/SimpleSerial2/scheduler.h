@@ -19,5 +19,7 @@ public:
 
 	void dispatch(ticks_t now);
 
+	void testTimers();
+
 	//void dumpDestructive();
 };

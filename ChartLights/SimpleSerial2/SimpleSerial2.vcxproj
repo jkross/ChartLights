@@ -84,6 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globalTime.h" />
+    <ClInclude Include="ledDriver.h" />
     <ClInclude Include="Lfsr.h">
       <FileType>CppCode</FileType>
     </ClInclude>
@@ -102,6 +103,7 @@
     <ClInclude Include="__vm\.SimpleSerial2.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ledDriver.cpp" />
     <ClCompile Include="Lfsr.cpp" />
     <ClCompile Include="perfStat.cpp" />
     <ClCompile Include="rtc.cpp" />

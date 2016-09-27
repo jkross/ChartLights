@@ -45,6 +45,9 @@
     <ClInclude Include="rtc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ledDriver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="perfStat.cpp">
@@ -60,6 +63,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="rtc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ledDriver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
