@@ -214,7 +214,7 @@ void loop()
       datArray[sample].set(bit, 1);
     }
   }
-  for (int j = 50; j <= 50; j += 40) {
+  for (int j = 20; j <= 20; j += 40) {  //350mA @ 20%, 50% too high for wall plug
     //loop through all samples
     for (int sample = 0; sample < NUM_SAMPLES; sample++) {
       datArray[sample].setPwm(j);
