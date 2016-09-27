@@ -43,3 +43,6 @@
 # Visual studio crud
 **/\.vs/**
 **/__vm/**
+
+# Visual studio build output
+**/Debug/**

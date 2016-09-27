@@ -2,135 +2,41 @@
 
 #include "perfStat.h"
 #include "morse.h"
+#include "patterns.h"
+#include "timer.h"	
 
 // Timing delay for test loop
 #define DELAY 1000
 
-perfStat<100> *cnt;
+// perfStat<100> *cnt;
 
 //#include <iostream>
-using namespace std;
-#include <pnew.cpp>
-#include <iterator>
-#include <queue>
 
-typedef unsigned long ticks_t;
-const ticks_t HalfWrap = ~((ticks_t)0) >> 1;
+#include "globalTime.h"
+#include "scheduler.h"
 
-class globalTime {
-  private:
-    ticks_t _now;
+globalTime gTime;
 
-  public:
-    globalTime() {
-      set(0);
-    }
 
-    void set(ticks_t now) {
-      _now = now;
-    }
-
-    ticks_t get() {
-      return _now;
-    }
-};
-
-static globalTime gTime;
-
-class timer {
-  public:
-
-    ticks_t ticks;
-
-    void invoke(ticks_t now)
-    {
-      // cout << "callback: " << ticks << endl;
-      Serial.print("callback: ");
-      Serial.print(ticks, HEX);
-      Serial.println();
-      //Serial.println(ticks, HEX);
-    }
-
-    ticks_t remaining(ticks_t now)
-    {
-      return (ticks - now);
-    }
-
-    bool operator <(const timer& other) const
-    {
-      return (other.ticks - gTime.get()) < (ticks - gTime.get());
-    }
-
-    timer(int i)
-    {
-      ticks = i;
-    }
-
-    timer() {
-      ticks = 0;
-    }
-};
-
-class timers {
-    priority_queue<timer> timerList;
-
-  public:
-    void schedule(timer t)
-    {
-      timerList.push(t);
-    }
-
-    bool empty()
-    {
-      return timerList.empty();
-    }
-
-    bool expired(ticks_t now, timer t)
-    {
-      ticks_t remaining = t.remaining(now);
-      bool ret = (remaining - 1) > HalfWrap;
-      return ret;
-    }
-
-    void dispatch(ticks_t now)
-    {
-      do {
-        timer top = timerList.top();
-        if (!expired(now, top))
-          break;
-        timerList.pop();
-        top.invoke(now);
-      } while (!timerList.empty());
-    }
-
-    //void dumpDestructive()
-    //{
-    //  while (!timerList.empty()) {
-    //    unsigned long long i = timerList.top().ticks;
-    //    timerList.pop();
-    //    cout << i << endl;
-    //  }
-    //}
-};
 
 void doTimers() {
 
-  timers timers;
+  scheduler scheduler;
   gTime.set(((ticks_t)2));
-  timers.schedule(3);
-  timers.schedule(10);
-  timers.schedule(3);
-  timers.schedule(1);
-  timers.schedule(-1);
+  scheduler.schedule(3);
+  scheduler.schedule(10);
+  scheduler.schedule(3);
+  scheduler.schedule(1);
+  scheduler.schedule(-1);
 
   ticks_t now = gTime.get();
-  while (!timers.empty())
+  while (!scheduler.empty())
   {
     // cout << "now: " << now << endl;
     Serial.print("now: ");
     Serial.print(now, HEX);
     Serial.println();
-    timers.dispatch(now);
+    scheduler.dispatch(now);
     gTime.set(now++);
   }
 }
@@ -139,13 +45,13 @@ void setup ()
 {
   //set pins to output
   Serial.begin(57600);
-  cnt = new perfStat<100>();
+  // cnt = new perfStat<100>();
 
   doTimers();
 
 }
 
-class ledData {
+class ledDriver {
   private:
     static const int NUM_BANKS = 5;
     const int LEDS_PER_BANK = 8;
@@ -161,7 +67,7 @@ class ledData {
     byte _data[NUM_BANKS];
     int  _pwmPct;
   public:
-    ledData() {
+    ledDriver() {
       for (int i = 0; i < NUM_BANKS; i++) {
         _data[i] = 0;
       }
@@ -205,7 +111,7 @@ class ledData {
 };
 
 #define NUM_SAMPLES 2
-ledData datArray[NUM_SAMPLES];
+ledDriver datArray[NUM_SAMPLES];
 
 void loop()
 {

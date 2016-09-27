@@ -1,6 +1,8 @@
+#pragma once
+
 enum Morse {
-  MORSE_UNIT = 250,
-  MORSE_END  = 0
+	MORSE_UNIT = 250,
+	MORSE_END = 0
 };
 
 #define MORSE_DIT MORSE_UNIT, MORSE_UNIT
@@ -9,10 +11,10 @@ enum Morse {
 
 static const struct { int letter; int delays[13]; } MorseMap[] =
 {
-  { 'A',{ MORSE_DIT, MORSE_DAH, MORSE_END } },
-  { 'B',{ MORSE_DAH, MORSE_DIT, MORSE_DIT, MORSE_DIT, MORSE_END } },
-  { 'C',{ MORSE_DAH, MORSE_DIT, MORSE_DAH, MORSE_DIT, MORSE_END } },
-  { 'D',{ MORSE_DAH, MORSE_DIT, MORSE_DIT, MORSE_END } },
+	{ 'A',{ MORSE_DIT, MORSE_DAH, MORSE_END } },
+	{ 'B',{ MORSE_DAH, MORSE_DIT, MORSE_DIT, MORSE_DIT, MORSE_END } },
+	{ 'C',{ MORSE_DAH, MORSE_DIT, MORSE_DAH, MORSE_DIT, MORSE_END } },
+	{ 'D',{ MORSE_DAH, MORSE_DIT, MORSE_DIT, MORSE_END } },
 	{ 'E', { MORSE_DIT, MORSE_END } },
 	{ 'F', { MORSE_DIT, MORSE_DIT, MORSE_DAH, MORSE_DIT, MORSE_END } },
 	{ 'G', { MORSE_DAH, MORSE_DAH, MORSE_DIT, MORSE_END } },
