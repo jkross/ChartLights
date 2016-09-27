@@ -79,13 +79,28 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="globalTime.h" />
+    <ClInclude Include="Lfsr.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="morse.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="patterns.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
     <ClInclude Include="perfStat.h">
       <FileType>CppCode</FileType>
     </ClInclude>
+    <ClInclude Include="scheduler.h" />
+    <ClInclude Include="timer.h" />
     <ClInclude Include="__vm\.SimpleSerial2.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Lfsr.cpp" />
     <ClCompile Include="perfStat.cpp" />
+    <ClCompile Include="scheduler.cpp" />
+    <ClCompile Include="timer.cpp" />
   </ItemGroup>
   <PropertyGroup>
     <DebuggerFlavor>VisualMicroDebugger</DebuggerFlavor>
