@@ -3,7 +3,7 @@
 #include <pnew.cpp>
 
 void 
-scheduler::schedule(timer t)
+scheduler::schedule(timer* t)
 {
 	timerList.push(t);
 }
@@ -15,49 +15,60 @@ scheduler::empty()
 }
 
 bool 
-scheduler::expired(ticks_t now, timer t)
+scheduler::expired(ticks_t now, timer* t)
 {
-	ticks_t remaining = t.remaining(now);
-	bool ret = (remaining - 1) > HalfWrap;
-	return ret;
+	return timer::expired(now, t->ticks);
+	//ticks_t remaining = t->remaining(now);
+	//bool ret = (remaining - 1) > HalfWrap;
+	//return ret;
 }
 
 void 
 scheduler::dispatch(ticks_t now)
 {
 	do {
-		timer top = timerList.top();
+		timer* top = timerList.top();
 		if (!expired(now, top))
 			break;
 		timerList.pop();
-		top.invoke(now);
+		top->invoke(now);
 	} while (!timerList.empty());
 }
 
-//void 
-//scheduler::dumpDestructive()
-//{
-//  while (!timerList.empty()) {
-//    unsigned long long i = timerList.top().ticks;
-//    timerList.pop();
-//    cout << i << endl;
-//  }
-//}
+void 
+scheduler::dumpDestructive()
+{
+  while (!timerList.empty()) {
+    ticks_t i = timerList.top()->ticks;
+    timerList.pop();
+    Serial.print("dump: ");
+    Serial.print(i, DEC);
+    Serial.println();
+  }
+}
 
-#include "globalTime.h"
-globalTime gTime;
+#include "snapshotTime.h"
+snapshotTime* gTime;
 
 void 
 scheduler::testTimers() {
+	gTime = new snapshotTime();
+	gTime->set(((ticks_t)2));
+#if 0
+	schedule(new timer(3, gTime));
+	schedule(new timer(10, gTime));
+	schedule(new timer(3, gTime));
+	schedule(new timer(1, gTime));
+	schedule(new timer(-1, gTime));
+  dumpDestructive();
+#endif
+  schedule(new timer(3, gTime));
+  schedule(new timer(10, gTime));
+  schedule(new timer(3, gTime));
+  schedule(new timer(1, gTime));
+  schedule(new timer(-1, gTime));
 
-	gTime.set(((ticks_t)2));
-	schedule(3);
-	schedule(10);
-	schedule(3);
-	schedule(1);
-	schedule(-1);
-
-	ticks_t now = gTime.get();
+	ticks_t now = gTime->get();
 	while (!empty())
 	{
 		// cout << "now: " << now << endl;
@@ -65,6 +76,7 @@ scheduler::testTimers() {
 		Serial.print(now, HEX);
 		Serial.println();
 		dispatch(now);
-		gTime.set(now++);
+		gTime->set(now++);
 	}
+  Serial.println("testTimers end");
 }

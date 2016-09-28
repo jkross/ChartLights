@@ -1,6 +1,7 @@
 // Simple date conversions and calculations
 
-//#include <Arduino.h>
+#include <Arduino.h>
+#include "debug.h"
 
 //#define RTC_TEST
 #include "rtc.h"
@@ -123,7 +124,7 @@ rtc::rtc() {}
 
 void 
 rtc::setup () {
-
+  TEST((Serial.println("rtc setup begin")));
 #ifndef ESP8266
   while (!Serial); // for Leonardo/Micro/Zero
 #endif
@@ -142,6 +143,7 @@ rtc::setup () {
     // January 21, 2014 at 3am you would call:
     // rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));
   }
+  TEST((Serial.println("rtc setup end")));
 }
 
 void 

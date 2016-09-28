@@ -11,7 +11,7 @@ ledDriver::ledDriver() {
 	pinMode(dataPin, OUTPUT);
 	pinMode(oePin, OUTPUT);
 	digitalWrite(latchPin, LOW);
-	analogWrite(oePin, PWM_PCT_ACT_LOW(PWM_PCT));
+  digitalWrite(oePin, HIGH);
 }
 
 void

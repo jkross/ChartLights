@@ -1,11 +1,12 @@
 #pragma once
+typedef unsigned long ticks_t;
 
-class globalTime {
+class snapshotTime {
 private:
 	ticks_t _now;
 
 public:
-	globalTime() {
+	snapshotTime() {
 		set(0);
 	}
 
@@ -18,4 +19,4 @@ public:
 	}
 };
 
-extern globalTime gTime;
+// extern snapshotTime gTime;

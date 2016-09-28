@@ -1,12 +1,13 @@
 #pragma once
 
-struct patterns {
+#define PATTERN_SEQ_LEN 2
+struct pattern {
   int pin;
   // on, followed by off
-  int sequence[2];
+  int sequence[PATTERN_SEQ_LEN];
 };
 
-struct patterns patterns[] = {
+struct pattern patterns[] = {
   { /*pin*/  0, /*sequence*/ { 250, 3750 } /* Fl R 4s      38-56-23.244N 076-31-38.730W  South River Light 12 */ },
   { /*pin*/  1, /*sequence*/ { 250, 3750 } /* Fl G 4s      38-56-49.913N 076-27-47.212W  Lake Ogleton Entrance Light 5 */ },
   { /*pin*/  2, /*sequence*/ { 250, 2250 } /* Fl G 2.5s    38-56-06.378N 076-31-24.210W  South River Light 11 */ },

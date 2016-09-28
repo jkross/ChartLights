@@ -83,7 +83,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="globalTime.h" />
+    <ClInclude Include="debug.h" />
+    <ClInclude Include="ledPattern.h" />
+    <ClInclude Include="snapshotTime.h" />
     <ClInclude Include="ledDriver.h" />
     <ClInclude Include="Lfsr.h">
       <FileType>CppCode</FileType>
@@ -104,6 +106,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ledDriver.cpp" />
+    <ClCompile Include="ledPattern.cpp" />
     <ClCompile Include="Lfsr.cpp" />
     <ClCompile Include="perfStat.cpp" />
     <ClCompile Include="rtc.cpp" />
