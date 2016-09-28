@@ -1,14 +1,13 @@
 #include <Arduino.h>
+#include "debug.h"
 #include "timer.h"
 #include "snapshotTime.h"
 #include <new>
 
 bool
 timer::invoke(ticks_t now) {
-  Serial.print("callback: ");
-  Serial.print(ticks, HEX);
-  Serial.println();
-  return false;
+	SPAB("callback: ", (ticks, HEX)); SPLN();
+	return false;
 }
 
 ticks_t
@@ -20,15 +19,10 @@ bool
 timer::operator <(const timer other) const
 {
   bool ret = (other.ticks - gTime->get()) < (ticks - gTime->get());
-#ifdef VERBOSE_PRINT
-  Serial.print("other: ");
-  Serial.print(other.ticks, DEC);
-  Serial.print(" this : ");
-  Serial.print(ticks);
-  Serial.print(" isLess: ");
-  Serial.print(ret, DEC);
-  Serial.println();
-#endif // VERBOSE_PRINT
+  SPAV((other.ticks, DEC));
+  SPABV(" < ", ticks);
+  SPABV(" = ", (ret, DEC));
+  SPLNV();
   return ret;
 }
 
@@ -36,14 +30,10 @@ bool
 timer::operator <(const timer* other) const
 {
   bool ret = (other->ticks - gTime->get()) < (ticks - gTime->get());
-#ifdef VERBOSE_PRINT
-  Serial.print(other->ticks, DEC);
-  Serial.print(" < ");
-  Serial.print(ticks);
-  Serial.print(" ");
-  Serial.print(ret, DEC);
-  Serial.println();
-#endif // VERBOSE_PRINT
+  SPAV((other->ticks, DEC));
+  SPABV(" < ", ticks);
+  SPABV(" = ", (ret, DEC));
+  SPLNV();
   return ret;
 }
 

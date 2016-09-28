@@ -27,7 +27,7 @@ rtc* realTime;
 
 void setup ()
 {
-  Serial.begin(57600);
+  Serial.begin(115200);
 
 #ifdef  RUN_TESTS
   for (int sample = 0; sample < NUM_SAMPLES; sample++) {

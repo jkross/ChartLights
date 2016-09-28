@@ -1,9 +1,12 @@
 #pragma once
 
+typedef unsigned short seq_t;
+typedef unsigned short pin_t;
+
 #define PATTERN_SEQ_LEN 2
 struct pattern {
-  int pin;
+  pin_t pin;
   // on, followed by off
-  int sequence[PATTERN_SEQ_LEN];
+  seq_t sequence[PATTERN_SEQ_LEN];
 };
 

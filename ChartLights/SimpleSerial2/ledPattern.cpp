@@ -1,6 +1,8 @@
 #include <Arduino.h>
+#include "debug.h"
 #include "ledPattern.h"
 #include "lightList.h"
+
 
 ledPattern::ledPattern(struct pattern* ppattern, snapshotTime *snapshot)
 {
@@ -17,6 +19,7 @@ ledPattern::init(ticks_t now, ledDriver* driver)
 	return invoke(now);
 }
 
+
 bool
 ledPattern::invoke(ticks_t now)
 {
@@ -24,12 +27,10 @@ ledPattern::invoke(ticks_t now)
 		int bitval = (_state & 0x1) ^ 0x1;		// alternate between on/off
 		_driver->set(_ppattern->pin, bitval);	// start off setting the bit
 		ticks = ticks + _ppattern->sequence[_state];
-    _state = (_state + 1) % PATTERN_SEQ_LEN;
-#define SPAB(A,B) Serial.print(A); Serial.print(B)
-#define SPL Serial.println
-  SPAB("now ", now); SPAB(" pin: ", _ppattern->pin); SPAB(" val: ", bitval); SPAB(" ticks ", ticks); SPL();
+		_state = (_state + 1) % PATTERN_SEQ_LEN;
+		SPAB("now ", now); SPAB(" pin: ", _ppattern->pin); SPAB(" val: ", bitval); SPAB(" ticks ", ticks); SPLN();
 	} while (timer::expired(now, ticks));
-//  SPL("lpInvoke end");
+	//  SPLN("lpInvoke end");
 	return true;
 }
 
