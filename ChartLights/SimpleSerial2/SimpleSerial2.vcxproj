@@ -84,6 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="debug.h" />
+    <ClInclude Include="lightList.h" />
     <ClInclude Include="ledPattern.h" />
     <ClInclude Include="snapshotTime.h" />
     <ClInclude Include="ledDriver.h" />

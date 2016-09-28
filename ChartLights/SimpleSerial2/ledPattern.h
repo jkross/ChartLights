@@ -9,12 +9,11 @@
 class ledPattern : public timer {
 private:
 	int				_state;
-	ticks_t			_due;
 	struct pattern* _ppattern;
 	ledDriver*		_driver;
 public:
-	ledPattern(struct pattern* ppattern);
-	ticks_t init(ticks_t now, ledDriver* driver);
-	ticks_t invoke(ticks_t now);
-
+	ledPattern(pattern * ppattern, snapshotTime * snapshot);
+	virtual bool init(ticks_t now, ledDriver* driver);
+	virtual bool invoke(ticks_t now);
+	static void loadPatterns(scheduler * sched, ledDriver * driver, snapshotTime* snapshot);
 };

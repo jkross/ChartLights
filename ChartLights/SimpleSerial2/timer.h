@@ -6,7 +6,7 @@
 const ticks_t HalfWrap = ~((ticks_t)0) >> 1;
 
 class timer {
-private:
+protected:
 	snapshotTime *gTime;
 
 public:
@@ -15,7 +15,8 @@ public:
 	timer(int i, snapshotTime* snapshot);
 	timer();
 
-	void invoke(ticks_t now);
+	// if returns true, re-schedule
+	virtual bool invoke(ticks_t now);
 	ticks_t remaining(ticks_t now);
 
 	bool operator <(const timer other) const;

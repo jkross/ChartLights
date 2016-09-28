@@ -24,7 +24,9 @@ class scheduler {
 
     bool expired(ticks_t now, timer* t);
 
-    void dispatch(ticks_t now);
+    ticks_t dispatch(ticks_t now);
+
+    ticks_t remaining(ticks_t now);
 
     void testTimers();
 

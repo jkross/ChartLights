@@ -3,11 +3,12 @@
 #include "snapshotTime.h"
 #include <new>
 
-void
+bool
 timer::invoke(ticks_t now) {
   Serial.print("callback: ");
   Serial.print(ticks, HEX);
   Serial.println();
+  return false;
 }
 
 ticks_t

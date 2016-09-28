@@ -18,21 +18,34 @@ bool
 scheduler::expired(ticks_t now, timer* t)
 {
 	return timer::expired(now, t->ticks);
-	//ticks_t remaining = t->remaining(now);
-	//bool ret = (remaining - 1) > HalfWrap;
-	//return ret;
 }
 
-void 
+ticks_t
 scheduler::dispatch(ticks_t now)
 {
+	timer *top;
 	do {
-		timer* top = timerList.top();
+		top = timerList.top();
 		if (!expired(now, top))
 			break;
 		timerList.pop();
-		top->invoke(now);
+		bool another = top->invoke(now);
+		if (another) {
+			schedule(top);
+		}
 	} while (!timerList.empty());
+	return top->remaining(now);
+}
+
+ticks_t
+scheduler::remaining(ticks_t now)
+{
+	ticks_t remain = 0;
+	if (!timerList.empty()) {
+		timer *top = timerList.top();
+		remain = top->remaining(now);
+	}
+	return remain;
 }
 
 void 
