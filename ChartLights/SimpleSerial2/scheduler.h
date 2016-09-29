@@ -6,6 +6,8 @@ using namespace std;
 
 #include <iterator>
 #include <queue>
+#include "Lfsr.h"
+
 class Compare {
   public:
     bool operator()(timer *left, timer* right) {
@@ -16,11 +18,17 @@ class Compare {
 
 class scheduler {
     priority_queue<timer *, vector<timer *>, Compare> timerList;
+	deque<timer *> expiredDeque;
+	lfsr* _lfsr;
 
   public:
-    void schedule(timer* t);
+	scheduler();
+
+    void queueTimer(timer* t);
 
     bool empty();
+
+	int size();
 
     bool expired(ticks_t now, timer* t);
 

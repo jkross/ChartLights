@@ -5,7 +5,7 @@
 #include <new>
 
 bool
-timer::invoke(ticks_t now) {
+timer::invoke(ticks_t now, int fuzz) {
 	SPAB("callback: ", (ticks, HEX)); SPLN();
 	return false;
 }
@@ -15,21 +15,21 @@ timer::remaining(ticks_t now) {
   return (ticks - now);
 }
 
-bool
-timer::operator <(const timer other) const
-{
-  bool ret = (other.ticks - gTime->get()) < (ticks - gTime->get());
-  SPAV((other.ticks, DEC));
-  SPABV(" < ", ticks);
-  SPABV(" = ", (ret, DEC));
-  SPLNV();
-  return ret;
-}
+//bool
+//timer::operator <(const timer other) const
+//{
+//  bool ret = (other.ticks /*- gTime->get()*/) < (ticks /*- gTime->get()*/);
+//  SPAV((other.ticks, DEC));
+//  SPABV(" < ", ticks);
+//  SPABV(" = ", (ret, DEC));
+//  SPLNV();
+//  return ret;
+//}
 
 bool
 timer::operator <(const timer* other) const
 {
-  bool ret = (other->ticks - gTime->get()) < (ticks - gTime->get());
+  bool ret = (other->ticks /*- gTime->get()*/) < (ticks /*- gTime->get()*/);
   SPAV((other->ticks, DEC));
   SPABV(" < ", ticks);
   SPABV(" = ", (ret, DEC));

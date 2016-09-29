@@ -2,8 +2,13 @@
 #include "scheduler.h"
 #include <pnew.cpp>
 
-void 
-scheduler::schedule(timer* t)
+scheduler::scheduler()
+{
+	_lfsr = new lfsr();
+}
+
+void
+scheduler::queueTimer(timer* t)
 {
 	timerList.push(t);
 }
@@ -12,6 +17,12 @@ bool
 scheduler::empty()
 {
 	return timerList.empty();
+}
+
+int
+scheduler::size()
+{
+	return timerList.size();
 }
 
 bool 
@@ -24,17 +35,26 @@ ticks_t
 scheduler::dispatch(ticks_t now)
 {
 	timer *top;
-	do {
+	while (!timerList.empty() && expired(now, timerList.top())) {
 		top = timerList.top();
-		if (!expired(now, top))
-			break;
 		timerList.pop();
-		bool another = top->invoke(now);
+		expiredDeque.push_front(top);
+	}
+	while (!expiredDeque.empty()) {
+		top = expiredDeque.back();
+		expiredDeque.pop_back();
+		bool another = top->invoke(now, (_lfsr->next() & 0x1));
 		if (another) {
-			schedule(top);
+			queueTimer(top);
+			//ticks_t next = timerList.top()->ticks; // DBG
+			//lSize = size(); // DBG
 		}
-	} while (!timerList.empty());
-	return top->remaining(now);
+	}
+	ticks_t remaining = 0;
+	if (!timerList.empty()) {
+		remaining = timerList.top()->remaining(now);
+	}
+	return remaining;
 }
 
 ticks_t
@@ -58,38 +78,4 @@ scheduler::dumpDestructive()
     Serial.print(i, DEC);
     Serial.println();
   }
-}
-
-#include "snapshotTime.h"
-snapshotTime* gTime;
-
-void 
-scheduler::testTimers() {
-	gTime = new snapshotTime();
-	gTime->set(((ticks_t)2));
-#if 0
-	schedule(new timer(3, gTime));
-	schedule(new timer(10, gTime));
-	schedule(new timer(3, gTime));
-	schedule(new timer(1, gTime));
-	schedule(new timer(-1, gTime));
-  dumpDestructive();
-#endif
-  schedule(new timer(3, gTime));
-  schedule(new timer(10, gTime));
-  schedule(new timer(3, gTime));
-  schedule(new timer(1, gTime));
-  schedule(new timer(-1, gTime));
-
-	ticks_t now = gTime->get();
-	while (!empty())
-	{
-		// cout << "now: " << now << endl;
-		Serial.print("now: ");
-		Serial.print(now, HEX);
-		Serial.println();
-		dispatch(now);
-		gTime->set(now++);
-	}
-  Serial.println("testTimers end");
 }

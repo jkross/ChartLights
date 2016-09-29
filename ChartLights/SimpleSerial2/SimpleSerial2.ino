@@ -2,7 +2,7 @@
 
 #include <RTClib.h>
 #include "perfStat.h"
-#include "morse.h"
+//#include "morse.h"
 #include "timer.h"	
 #include "scheduler.h"
 #include "ledDriver.h"
@@ -10,13 +10,13 @@
 #include "ledPattern.h"
 #include "debug.h"
 
-#ifdef RUN_TESTS
+#ifdef RUN_TESTS2
 // Timing delay for test loop
 #define DELAY 1000
 
 #define NUM_SAMPLES 2
 ledDriver* datArray[NUM_SAMPLES];
-#endif	// !RUN_TESTS
+#endif	// RUN_TESTS
 
 scheduler *myScheduler;
 ledDriver *myDriver;
@@ -29,18 +29,19 @@ void setup ()
 {
   Serial.begin(115200);
 
-#ifdef  RUN_TESTS
+#ifdef  RUN_TESTS2  
   for (int sample = 0; sample < NUM_SAMPLES; sample++) {
     datArray[sample] = new ledDriver();
     for (int bit = sample; bit < 40; bit += 2) {
       datArray[sample]->set(bit, 1);
     }
   }
-#endif  // RUN_TESTS
+
   // cnt = new perfStat<100>();
 
-  scheduler *testScheduler = new scheduler();
-  testScheduler->testTimers();
+  //scheduler *testScheduler = new scheduler();
+  //testScheduler->testTimers();
+#endif  // RUN_TESTS
 
   realTime = new rtc();
   realTime->setup();
@@ -56,26 +57,16 @@ void setup ()
   myDriver->writeData();
 }
 
-
+int freeRam() {
+	extern int __heap_start, *__brkval;
+	int v;
+	return (int)&v - (__brkval == 0 ? (int)&__heap_start : (int)__brkval);
+}
 
 void loop()
 {
-#ifdef RUN_TESTS2
-  for (int j = 5; j <= 5; j += 40) {  //350mA @ 20%, 50% too high for wall plug
-    //loop through all samples
-    for (int sample = 0; sample < NUM_SAMPLES; sample++) {
-      datArray[sample]->setPwm(j);
-      datArray[sample]->writeData();
-      delay(DELAY);
-    }
-  }
-#endif // RUN_TESTS2
   snap->set(millis());
   ticks_t nextDelay = myScheduler->dispatch(snap->get());
-//  Serial.print("loop.now: ");
-//  Serial.print(snap->get(), HEX);
-//  Serial.print(" delay: ");
-//  Serial.println(nextDelay, HEX);
   myDriver->writeData();
   delay(nextDelay);
 }

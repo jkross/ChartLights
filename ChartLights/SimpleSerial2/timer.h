@@ -16,7 +16,7 @@ public:
 	timer();
 
 	// if returns true, re-schedule
-	virtual bool invoke(ticks_t now);
+	virtual bool invoke(ticks_t now, int fuzz);
 	ticks_t remaining(ticks_t now);
 
 	bool operator <(const timer other) const;

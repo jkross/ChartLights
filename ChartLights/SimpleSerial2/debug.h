@@ -10,7 +10,7 @@
 #endif  // !RUN_TESTS
 
 #ifdef DEBUG
-//#define DEBUG_PRINT
+#define DEBUG_PRINT
 //#define DEBUG_PRINT_VERBOSE
 #endif // DEBUG
 
