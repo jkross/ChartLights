@@ -35,8 +35,4 @@ class scheduler {
     ticks_t dispatch(ticks_t now);
 
     ticks_t remaining(ticks_t now);
-
-    void testTimers();
-
-    void dumpDestructive();
 };

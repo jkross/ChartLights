@@ -19,7 +19,6 @@ public:
 	virtual bool invoke(ticks_t now, int fuzz);
 	ticks_t remaining(ticks_t now);
 
-	bool operator <(const timer other) const;
 	bool operator <(const timer* other) const;
 
 	static bool expired(ticks_t now, ticks_t due);
