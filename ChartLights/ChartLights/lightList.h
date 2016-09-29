@@ -1,6 +1,6 @@
 #pragma once
 struct pattern uniqueLightSeq[] = {
-	{ 40,   40 },
+	{ 80,   80 },
 	{ 250, 2250 },
 	{ 250, 3750 },
 	{ 250, 4750 },

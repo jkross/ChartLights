@@ -67,15 +67,3 @@ scheduler::remaining(ticks_t now)
 	}
 	return remain;
 }
-
-void 
-scheduler::dumpDestructive()
-{
-  while (!timerList.empty()) {
-    ticks_t i = timerList.top()->ticks;
-    timerList.pop();
-    Serial.print("dump: ");
-    Serial.print(i, DEC);
-    Serial.println();
-  }
-}

@@ -1,10 +1,10 @@
 #include <Arduino.h>
 #include "debug.h"
-#include "ledPattern.h"
+#include "ledTimer.h"
 #include "lightList.h"
 
 
-ledPattern::ledPattern(uint8_t pin, int seqIndex, snapshotTime *snapshot)
+ledTimer::ledTimer(uint8_t pin, int seqIndex, snapshotTime *snapshot)
 {
 	_state = 0;
 	_pin = pin;
@@ -13,7 +13,7 @@ ledPattern::ledPattern(uint8_t pin, int seqIndex, snapshotTime *snapshot)
 }
 
 bool
-ledPattern::init(ticks_t now, ledDriver* driver)
+ledTimer::init(ticks_t now, ledDriver* driver)
 {
 	_driver = driver;
 	ticks = now;
@@ -23,14 +23,14 @@ ledPattern::init(ticks_t now, ledDriver* driver)
 #define MULTIPLIER 1
 #define FUZZ	   10
 uint16_t
-ledPattern::sequenceLength(int state, int fuzz) {
+ledTimer::sequenceLength(int state, int fuzz) {
 	uint16_t duration = uniqueLightSeq[_seqIndex].sequence[state];
 	duration += fuzz ? FUZZ : 0;
 	return duration;
 }
 
 bool
-ledPattern::invoke(ticks_t now, int fuzz)
+ledTimer::invoke(ticks_t now, int fuzz)
 {
 	do {
 		int bitval = (_state & 0x1) ^ 0x1;		// alternate between on/off
@@ -43,12 +43,12 @@ ledPattern::invoke(ticks_t now, int fuzz)
 	return true;
 }
 
-void ledPattern::loadPatterns(scheduler* sched, ledDriver* driver, snapshotTime* snapshot)
+void ledTimer::loadPatterns(scheduler* sched, ledDriver* driver, snapshotTime* snapshot)
 {
 	ticks_t now = snapshot->get();
-	for (int i = 0; i < 38/*NUM_LIGHT_LIST*/; i++) {
-		ledPattern *light = new ledPattern(i, lightList[i], snapshot);
-		if (0 == i) { SPAB("szLed ", (sizeof(ledPattern), DEC)); }
+	for (int i = 0; i < NUM_LIGHT_LIST; i++) {
+		ledTimer *light = new ledTimer(i, lightList[i], snapshot);
+		if (0 == i) { SPAB("szLed ", (sizeof(ledTimer), DEC)); }
 		if (light->init(now, driver)) {
 			sched->queueTimer(light);
 		}
