@@ -45,7 +45,7 @@ ledTimer::invoke(ticks_t now, int fuzz)
 		//SPAB("now ", now); SPAB(" pin: ", _ppattern->pin); SPAB(" val: ", bitval); SPAB(" ticks ", ticks); SPLN();
 	} while (expired(now));						// catch up if we need to
 	//  SPLN("lpInvoke end");
-	return true;
+	return true;								// schedule again
 }
 
 void 

@@ -2,14 +2,14 @@
 
 enum Morse {
 	MORSE_UNIT = 250,
-	MORSE_END = 0
+	MORSE_END = -1
 };
 
-#define MORSE_DIT MORSE_UNIT, MORSE_UNIT
-#define MORSE_DAH MORSE_UNIT*3, MORSE_UNIT
-#define MORSE_GAP MORSE_UNIT*7
+#define MORSE_DIT 1, 1
+#define MORSE_DAH 3, 1
+#define MORSE_GAP 0, 7
 
-static const struct { int letter; int delays[13]; } MorseMap[] =
+static const struct { unsigned char letter; uint8_t delays[13]; } MorseMap[] =
 {
 	{ 'A',{ MORSE_DIT, MORSE_DAH, MORSE_END } },
 	{ 'B',{ MORSE_DAH, MORSE_DIT, MORSE_DIT, MORSE_DIT, MORSE_END } },

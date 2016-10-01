@@ -4,9 +4,15 @@
 #include "snapshotTime.h"
 #include <new>
 
+timer::timer(ticks_t i, snapshotTime* snapshotp)
+{
+	ticks = i;
+	snapp = snapshotp;
+}
+
 bool
 timer::invoke(ticks_t now, int fuzz) {
-	return false;
+	return false;		// default to one-shot
 }
 
 ticks_t
@@ -17,7 +23,7 @@ timer::remaining(ticks_t now) {
 bool
 timer::expired(ticks_t now)
 {
-	return remaining(now) < HalfWrap;
+	return (remaining(now)-1) < HalfWrap;
 }
 
 bool
@@ -30,10 +36,4 @@ timer::operator <(const timer* other) const
   SPABV(" = ", (ret, DEC));
   SPLNV();
   return ret;
-}
-
-timer::timer(ticks_t i, snapshotTime* snapshotp)
-{
-  ticks = i;
-  snapp = snapshotp;
 }
