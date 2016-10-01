@@ -25,17 +25,19 @@ scheduler::size()
 	return timerList.size();
 }
 
-bool 
-scheduler::expired(ticks_t now, timer* t)
+// Has any scheduled timer expired?
+bool
+scheduler::expired(ticks_t now)
 {
-	return timer::expired(now, t->ticks);
+	// Check the next timer...
+	return timerList.top()->expired(now);
 }
 
-ticks_t
+void
 scheduler::dispatch(ticks_t now)
 {
 	timer *top;
-	while (!timerList.empty() && expired(now, timerList.top())) {
+	while (!timerList.empty() && expired(now)) {
 		top = timerList.top();
 		timerList.pop();
 		expiredDeque.push_front(top);
@@ -50,11 +52,6 @@ scheduler::dispatch(ticks_t now)
 			//lSize = size(); // DBG
 		}
 	}
-	ticks_t remaining = 0;
-	if (!timerList.empty()) {
-		remaining = timerList.top()->remaining(now);
-	}
-	return remaining;
 }
 
 ticks_t

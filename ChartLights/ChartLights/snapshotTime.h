@@ -18,5 +18,3 @@ public:
 		return _now;
 	}
 };
-
-// extern snapshotTime gTime;

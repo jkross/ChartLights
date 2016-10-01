@@ -7,7 +7,7 @@ struct pattern uniqueLightSeq[] = {
 	{ 250, 5750 }
 };
 
-uint8_t lightList[] = {
+struct lightDesc lightList[] = {
 	/*pin*/ /* 0,*/ /*sequenceId*/  2 /* Fl R 4s      38-56-23.244N 076-31-38.730W  South River Light 12 */ ,
 	/*pin*/ /* 1,*/ /*sequenceId*/  2 /* Fl G 4s      38-56-49.913N 076-27-47.212W  Lake Ogleton Entrance Light 5 */ ,
 	/*pin*/ /* 2,*/ /*sequenceId*/  1 /* Fl G 2.5s    38-56-06.378N 076-31-24.210W  South River Light 11 */ ,

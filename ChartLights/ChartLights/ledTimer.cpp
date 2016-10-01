@@ -4,12 +4,13 @@
 #include "lightList.h"
 
 
-ledTimer::ledTimer(uint8_t pin, int seqIndex, snapshotTime *snapshot)
+ledTimer::ledTimer(uint8_t pin, int seqIndex, snapshotTime *snapshotp)
+	: timer(0, snapshotp)
 {
 	_state = 0;
 	_pin = pin;
 	_seqIndex = seqIndex;
-	gTime = snapshot;
+	snapp = snapshotp;
 }
 
 bool
@@ -27,7 +28,7 @@ ledTimer::init(ticks_t start, ledDriver* driver)
 #define START_FUZZ (2048 / START_BUCKETS)
 
 uint16_t
-ledTimer::sequenceLength(int state, int fuzz) {
+ledTimer::stepDuration(int state, int fuzz) {
 	uint16_t duration = uniqueLightSeq[_seqIndex].sequence[state];
 	duration += fuzz ? FUZZ : 0;
 	return duration;
@@ -39,24 +40,26 @@ ledTimer::invoke(ticks_t now, int fuzz)
 	do {
 		int bitval = (_state & 0x1) ^ 0x1;		// alternate between on/off
 		_driver->set(_pin, bitval);				// start off setting the bit
-		ticks = ticks + sequenceLength(_state, fuzz);
+		ticks = ticks + stepDuration(_state, fuzz);
 		_state = (_state + 1) % PATTERN_SEQ_LEN;
 		//SPAB("now ", now); SPAB(" pin: ", _ppattern->pin); SPAB(" val: ", bitval); SPAB(" ticks ", ticks); SPLN();
-	} while (timer::expired(now, ticks));
+	} while (expired(now));						// catch up if we need to
 	//  SPLN("lpInvoke end");
 	return true;
 }
 
 void 
-ledTimer::loadPatterns(scheduler* sched, ledDriver* driver, snapshotTime* snapshot)
+ledTimer::loadPatterns(scheduler* schedp, ledDriver *driverp, snapshotTime* snapshotp)
 {
-	lfsr *tlfsr = new lfsr();
-	ticks_t now = snapshot->get();
+	lfsr *lfsrp = new lfsr();
+	ticks_t now = snapshotp->get();
 	for (int i = 0; i < NUM_LIGHT_LIST; i++) {
-		ledTimer *light = new ledTimer(i, lightList[i], snapshot);
-		int startOffset = (tlfsr->next() % START_BUCKETS) * START_FUZZ;
-		if (light->init(now + startOffset, driver)) {
-			sched->queueTimer(light);
+		if (lightList[i].seqId != LIGHT_DESC_NO_BLINK) {
+			ledTimer *light = new ledTimer(i, lightList[i].seqId, snapshotp);
+			ticks_t startOffset = (lfsrp->next() % START_BUCKETS) * START_FUZZ;
+			if (light->init(now + startOffset, driverp)) {
+				schedp->queueTimer(light);
+			}
 		}
 	}
 }

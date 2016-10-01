@@ -2,7 +2,7 @@
 
 #include <RTClib.h>
 #include "perfStat.h"
-//#include "morse.h"
+#include "morse.h"
 #include "timer.h"	
 #include "scheduler.h"
 #include "ledDriver.h"
@@ -12,7 +12,7 @@
 
 scheduler *myScheduler;
 ledDriver *myDriver;
-snapshotTime *snap;
+snapshotTime *snapp;
 
 #if 0
 #include "rtc.h"
@@ -28,22 +28,29 @@ void setup ()
   realTime->setup();
 #endif
 
+  if (MorseMap[0].letter != 'A') {
+	  SPLN("BadMorseMap");
+  }
+
   myScheduler = new scheduler();
   myDriver = new ledDriver();
-  snap = new snapshotTime();
-  snap->set(millis());
+  snapp = new snapshotTime();
+  snapp->set(millis());
 
-  ledTimer::loadPatterns(myScheduler, myDriver, snap);
+  ledTimer::loadPatterns(myScheduler, myDriver, snapp);
   myDriver->setPwm(PWM_PCT);
   myDriver->writeData();
 }
 
 void loop()
 {
-  snap->set(millis());
-  ticks_t nextDelay = myScheduler->dispatch(snap->get());
-  myDriver->writeData();
-  delay(nextDelay);
+	snapp->set(millis());
+	do {
+		myScheduler->dispatch(snapp->get());
+		myDriver->writeData();
+		snapp->set(millis());
+	} while (myScheduler->expired(snapp->get()));  // while there is any expired timer
+	delay(myScheduler->remaining(snapp->get()));
 }
 
 

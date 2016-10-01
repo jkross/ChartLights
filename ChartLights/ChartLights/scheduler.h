@@ -30,9 +30,9 @@ class scheduler {
 
 	int size();
 
-    bool expired(ticks_t now, timer* t);
+	bool expired(ticks_t now);			// has any timer expired?
 
-    ticks_t dispatch(ticks_t now);
+	void dispatch(ticks_t now);
 
     ticks_t remaining(ticks_t now);
 };
