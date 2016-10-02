@@ -16,8 +16,8 @@ private:
 	uint16_t stepDuration(int state, int fuzz);
 
 public:
-	ledTimer(uint8_t pin, int seqIndex, snapshotTime * snapshotp);
+	ledTimer(uint8_t pin, int seqIndex);
 	virtual bool init(ticks_t now, ledDriver* driver);
 	virtual bool invoke(ticks_t now, int fuzz);
-	static void loadPatterns(scheduler * sched, ledDriver * driver, snapshotTime* snapshot);
+	static void loadPatterns(scheduler * schedp, ledDriver * driverp, ticks_t now);
 };

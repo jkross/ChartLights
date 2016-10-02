@@ -1,13 +1,15 @@
 // Cascaded TLC5916 drivers
 
+#if 0
 #include <RTClib.h>
+#endif
 #include "perfStat.h"
-#include "morse.h"
 #include "timer.h"	
 #include "scheduler.h"
 #include "ledDriver.h"
 #include "snapshotTime.h"
 #include "ledTimer.h"
+#include "morseTimer.h"
 #include "debug.h"
 
 scheduler *myScheduler;
@@ -21,23 +23,21 @@ rtc* realTime;
 
 void setup ()
 {
-  Serial.begin(115200);
+  //Serial.begin(115200);
 
  #if 0
   realTime = new rtc();
   realTime->setup();
 #endif
 
-  if (MorseMap[0].letter != 'A') {
-	  SPLN("BadMorseMap");
-  }
-
   myScheduler = new scheduler();
   myDriver = new ledDriver();
   snapp = new snapshotTime();
   snapp->set(millis());
+  ticks_t now = snapp->get();
 
-  ledTimer::loadPatterns(myScheduler, myDriver, snapp);
+  ledTimer::loadPatterns(myScheduler, myDriver, now);
+  morseTimer::loadPatterns(myScheduler, myDriver, now);
   myDriver->setPwm(PWM_PCT);
   myDriver->writeData();
 }

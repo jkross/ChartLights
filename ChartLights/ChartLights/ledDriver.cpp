@@ -1,7 +1,10 @@
+#ifndef WIN32
 #include <Arduino.h>
+#endif // !WIN32
 #include "ledDriver.h"
 
 ledDriver::ledDriver() {
+#ifndef WIN32
 	for (int i = 0; i < NUM_BANKS; i++) {
 		_data[i] = 0;
 	}
@@ -12,6 +15,7 @@ ledDriver::ledDriver() {
 	pinMode(oePin, OUTPUT);
 	digitalWrite(latchPin, LOW);
 	digitalWrite(oePin, HIGH);
+#endif	// !WIN32
 }
 
 void
@@ -23,6 +27,7 @@ ledDriver::setPwm(int pwmPct)
 
 void 
 ledDriver::writeData() {
+#ifndef WIN32
 	// disable LEDs and don't let driver switch to non-standard mode
 	digitalWrite(oePin, HIGH);
 	for (int bank = NUM_BANKS - 1; bank >= 0; bank--)
@@ -34,6 +39,7 @@ ledDriver::writeData() {
 	digitalWrite(latchPin, LOW);
 	// set ~OE according to PWM percentage
 	analogWrite(oePin, PWM_PCT_ACT_LOW(_pwmPct));
+#endif // WIN32
 }
 
 void ledDriver::set(int i, bool val) {

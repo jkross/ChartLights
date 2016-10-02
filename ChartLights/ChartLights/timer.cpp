@@ -1,13 +1,14 @@
+#ifndef WIN32
 #include <Arduino.h>
+#endif
 #include "debug.h"
 #include "timer.h"
 #include "snapshotTime.h"
 #include <new>
 
-timer::timer(ticks_t i, snapshotTime* snapshotp)
+timer::timer(ticks_t i)
 {
 	ticks = i;
-	snapp = snapshotp;
 }
 
 bool
@@ -23,17 +24,17 @@ timer::remaining(ticks_t now) {
 bool
 timer::expired(ticks_t now)
 {
-	return (remaining(now)-1) < HalfWrap;
+	return (now - ticks) < HalfWrap; // remaining(now)-1) < HalfWrap;
 }
 
 bool
 timer::operator <(const timer* other) const
 {
-  ticks_t now = 0/*snapp->get()*/;
-  bool ret = (other->ticks - now) < (ticks - now);
-  SPAV((other->ticks, DEC));
-  SPABV(" < ", ticks);
-  SPABV(" = ", (ret, DEC));
-  SPLNV();
+	bool ret = (other->ticks - ticks) > HalfWrap;
+		SPAV((other->ticks));
+		SPABV(" < ", ticks);
+		SPABV(" = ", (ret));
+		SPABV(" now: ", (now));
+		SPLNV();
   return ret;
 }
