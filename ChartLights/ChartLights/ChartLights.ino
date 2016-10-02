@@ -28,9 +28,11 @@ void setup ()
   realTime->setup();
 #endif
 
+#if 0
   if (MorseMap[0].letter != 'A') {
 	  SPLN("BadMorseMap");
   }
+#endif
 
   myScheduler = new scheduler();
   myDriver = new ledDriver();

@@ -23,17 +23,20 @@ timer::remaining(ticks_t now) {
 bool
 timer::expired(ticks_t now)
 {
-	return (remaining(now)-1) < HalfWrap;
+	return (now - ticks) < HalfWrap; // remaining(now)-1) < HalfWrap;
 }
 
 bool
 timer::operator <(const timer* other) const
 {
-  ticks_t now = 0/*snapp->get()*/;
-  bool ret = (other->ticks - now) < (ticks - now);
-  SPAV((other->ticks, DEC));
-  SPABV(" < ", ticks);
-  SPABV(" = ", (ret, DEC));
-  SPLNV();
+	ticks_t now = 0* snapp->get();
+	bool ret = (other->ticks - now) < (ticks - now);
+	if (((other->ticks - now) > HalfWrap) || ((ticks - now) > HalfWrap)) {
+		SPA((other->ticks));
+		SPAB(" < ", ticks);
+		SPAB(" = ", (ret));
+		SPAB(" now: ", (now));
+		SPLN();
+	}
   return ret;
 }

@@ -57,6 +57,15 @@
     <ClInclude Include="__vm\.SimpleSerial2.vsarduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="morseTimer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="morsePatterns.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="morseLightList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="__vm\.ChartLights.vsarduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
