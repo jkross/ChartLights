@@ -4,13 +4,12 @@
 #include "lightList.h"
 
 
-ledTimer::ledTimer(uint8_t pin, int seqIndex, snapshotTime *snapshotp)
-	: timer(0, snapshotp)
+ledTimer::ledTimer(uint8_t pin, int seqIndex)
+	: timer(0)
 {
 	_state = 0;
 	_pin = pin;
 	_seqIndex = seqIndex;
-	snapp = snapshotp;
 }
 
 bool
@@ -49,13 +48,12 @@ ledTimer::invoke(ticks_t now, int fuzz)
 }
 
 void 
-ledTimer::loadPatterns(scheduler* schedp, ledDriver *driverp, snapshotTime* snapshotp)
+ledTimer::loadPatterns(scheduler* schedp, ledDriver *driverp, ticks_t now)
 {
 	lfsr *lfsrp = new lfsr();
-	ticks_t now = snapshotp->get();
 	for (int i = 0; i < NUM_LIGHT_LIST; i++) {
 		if (lightList[i].seqId != LIGHT_DESC_NO_BLINK) {
-			ledTimer *light = new ledTimer(i, lightList[i].seqId, snapshotp);
+			ledTimer *light = new ledTimer(i, lightList[i].seqId);
 			ticks_t startOffset = (lfsrp->next() % START_BUCKETS) * START_FUZZ;
 			if (light->init(now + startOffset, driverp)) {
 				schedp->queueTimer(light);

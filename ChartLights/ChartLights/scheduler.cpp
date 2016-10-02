@@ -1,6 +1,8 @@
+#ifndef WIN32
 #include <Arduino.h>
-#include "scheduler.h"
 #include <pnew.cpp>
+#endif // !WIN32
+#include "scheduler.h"
 
 scheduler::scheduler()
 {

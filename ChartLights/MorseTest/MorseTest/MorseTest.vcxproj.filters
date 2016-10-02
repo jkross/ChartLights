@@ -15,78 +15,66 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ChartLights.ino" />
+    <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="perfStat.h">
+    <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Lfsr.h">
+    <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="morse.h">
+    <ClInclude Include="..\..\ChartLights\morse.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ChartLights\morseLightList.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ChartLights\morsePatterns.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ChartLights\morseTimer.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ChartLights\timer.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ChartLights\debug.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ChartLights\Lfsr.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ChartLights\scheduler.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="testLedDriver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="patterns.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="timer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="scheduler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ledDriver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="snapshotTime.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="debug.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lightList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ledTimer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="__vm\.SimpleSerial2.vsarduino.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="morseTimer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="morsePatterns.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="morseLightList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="__vm\.ChartLights.vsarduino.h">
+    <ClInclude Include="..\..\ChartLights\leddriver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="perfStat.cpp">
+    <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Lfsr.cpp">
+    <ClCompile Include="MorseTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="timer.cpp">
+    <ClCompile Include="..\..\ChartLights\morseTimer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="scheduler.cpp">
+    <ClCompile Include="..\..\ChartLights\timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ledDriver.cpp">
+    <ClCompile Include="..\..\ChartLights\Lfsr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ledTimer.cpp">
+    <ClCompile Include="..\..\ChartLights\scheduler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="morseTimer.cpp">
+    <ClCompile Include="..\..\ChartLights\ledDriver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

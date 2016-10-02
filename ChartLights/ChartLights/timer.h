@@ -10,7 +10,7 @@ protected:
 public:
 	ticks_t ticks;
 
-	timer(ticks_t i, snapshotTime * snapshotp);
+	timer(ticks_t i);
 	bool operator <(const timer* other) const;
 
 	virtual bool invoke(ticks_t now, int fuzz);	// if returns true, re-schedule

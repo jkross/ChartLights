@@ -1,4 +1,5 @@
 #pragma once
+#include <stdint.h>
 
 class ledDriver {
 private:
@@ -13,8 +14,8 @@ private:
 #define PWM_PCT_ACT_LOW(_PCT) ((int)255*(1-(_PCT/100.0)))
 #define PWM_PCT 10
 
-	byte _data[NUM_BANKS];
-	int  _pwmPct;
+	uint8_t _data[NUM_BANKS];
+	int		_pwmPct;
 public:
 	ledDriver();
 

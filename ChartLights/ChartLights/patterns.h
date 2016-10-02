@@ -10,7 +10,7 @@ struct pattern {
   seq_t sequence[PATTERN_SEQ_LEN];
 };
 
-#define LIGHT_DESC_NO_BLINK (~(uint8_t)0)
+#define LIGHT_DESC_NO_BLINK 0xFF
 struct lightDesc {
 	uint8_t	seqId;
 };
