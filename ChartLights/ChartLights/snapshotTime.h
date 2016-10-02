@@ -17,10 +17,10 @@ public:
 	}
 
 	void set(ticks_t now) {
-		_now = now;
+		_now = now + SNAP_OFFSET;
 	}
 
 	ticks_t get() {
-		return _now + SNAP_OFFSET;
+		return _now;
 	}
 };
