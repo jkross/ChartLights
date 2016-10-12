@@ -57,8 +57,10 @@ function getInRange($areaFile, $chartFile, $chartNum)
 {
 	$bb = getBB $chartFile $chartNum;
 	[xml]$areaXml = gc $areaFile;
-	$areaXml.root.dataroot.Vol_x0020_2_x0020_D5_x0020_LL_x0020_corr_x0020_thru | % {
+	$mName = $areaXml.root.dataroot | Get-Member | where Name -Match Vol | select -ExpandProperty name 
+	# $areaXml.root.dataroot.Vol_x0020_2_x0020_D5_x0020_LL_x0020_corr_x0020_thru | % {
 	# $areaXml.root.dataroot.Vol_x0020_6_x0020_D13_x0020_LL_x0020_corr_x0020_thru | % {
+	$areaXml.root.dataroot.$mName | % {
 		$llat = ParseLatLon($_.Position_x0020__x0028_Latitude_x0029_);
 		$llon = ParseLatLon($_.Position_x0020__x0028_Longitude_x0029_);
 		nno @{lat = $llat; lon = $llon; v=$_}
