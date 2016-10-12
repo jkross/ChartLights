@@ -21,36 +21,45 @@ snapshotTime *snapp;
 rtc* realTime;
 #endif
 
-void setup ()
+// 
+// Initialize board
+//
+void 
+setup ()
 {
-  //Serial.begin(115200);
+  //Serial.begin(115200);		// removed to save memory
 
  #if 0
   realTime = new rtc();
   realTime->setup();
 #endif
 
-  myScheduler = new scheduler();
+  myScheduler = new scheduler();							//  Initialize the LED timing scheduler and the LED driver hardware abstraction
   myDriver = new ledDriver();
-  snapp = new snapshotTime();
+  
+  snapp = new snapshotTime();								// Create the time snapshot class and initialize
   snapp->set(millis());
   ticks_t now = snapp->get();
 
-  ledTimer::loadPatterns(myScheduler, myDriver, now);
-  morseTimer::loadPatterns(myScheduler, myDriver, now);
-  myDriver->setPwm(PWM_PCT);
-  myDriver->writeData();
+  ledTimer::loadPatterns(myScheduler, myDriver, now);		// Load up the normal flashing patterns
+  morseTimer::loadPatterns(myScheduler, myDriver, now);		// Load up the lights which flash in Morse code
+  myDriver->setPwm(PWM_PCT);								// Set the global LED brightness
+  myDriver->writeData();									// Set the initial LED pattern based on the initialization calls 
 }
 
-void loop()
+// 
+// Main loop - call back all expired timers and update the LED pattern
+//
+void 
+loop()
 {
-	snapp->set(millis());
-	do {
-		myScheduler->dispatch(snapp->get());
-		myDriver->writeData();
-		snapp->set(millis());
-	} while (myScheduler->expired(snapp->get()));  // while there is any expired timer
-	delay(myScheduler->remaining(snapp->get()));
+	snapp->set(millis());									// set the current snapshot time
+	do {								
+		myScheduler->dispatch(snapp->get());				// Dispatch all expired timers
+		myDriver->writeData();								// Write updated LED pattern
+		snapp->set(millis());								// Update current time after dispatch to check for any new expired timers
+	} while (myScheduler->expired(snapp->get()));			// Continue dispatching while there is any expired timer - expect this to rarely loop
+	delay(myScheduler->remaining(snapp->get()));			// Delay until the next timer is due
 }
 
 
