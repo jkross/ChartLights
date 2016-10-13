@@ -17,9 +17,9 @@ function ParseLatLon($ll)
     if ($ll -match "(\d+)-(\d+)-(\d+(\.\d+)*)( *[NSEW])*") {
 	   	$d=$matches[1]; $m=$matches[2]; $s=$matches[3]; 
 		$dd = $d/1.0 + $m/60.0 + $s/(60.0*60.0); $dd
-	} elseif ($ll -match "(\d+\.\d+)( *[NSWE])*") {
+	} elseif ($ll -match "(\d+(\.\d+)*)( *[NSWE])*") {
 		$dd = $matches[1] / 1.0; $dd
-	} elseif ($ll -match "([-]*\d+\.\d+)") {
+	} elseif ($ll -match "([-]*\d+(\.\d+)*)") {
 		# only works if point is in same hemisphere as bounding box
 		$dd = [math]::abs($matches[1] / 1.0); $dd
 	} else {
@@ -85,7 +85,7 @@ function AddDistance($light, $places)
 		$llat = ParseLatLon($light.Position_x0020__x0028_Latitude_x0029_);
 		$llon = ParseLatLon($light.Position_x0020__x0028_Longitude_x0029_);
 		$drange = $light.Range / 1.0;
-		$light | add-member -force -notepropertymembers @{drange=$drange;dlat=$llat;dlon=$llon};
+		$light | add-member -force -notepropertymembers @{drange=$drange;dlat=$llat;dlon=$llon;dlon_neg=-$llon};
 		$minDist = 99999999;
 		$places.places.place | % { 
 			$name = "D_to_" + $_.name; 
@@ -107,3 +107,20 @@ function LightSort($inRange, $placeFile)
 }
 
 # $ir = getInRange <areafile> <chartfile> <chartnum>
+# LightSort $ir .\places.xml
+
+function makeCsvs()
+{
+	[xml]$cll = gc .\chartLatLon.xml; $cll.charts.chart | select -expandproperty number | % { 
+
+		del -force variable:ir;
+		$chartNum = $_;
+		dir *Weekly*.xml | % { 
+			$area = $_;
+			$irpart = getInRange $area chartLatLon.xml $chartNum
+			$ir = $ir + $irpart
+		}
+		LightSort $ir .\places.xml | convertto-csv | select -skip 1 | out-file -encoding ascii $("{0}.csv" -f $chartNum)
+	}
+}
+

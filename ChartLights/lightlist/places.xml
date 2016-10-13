@@ -1,0 +1,30 @@
+<places>
+	<place>
+		<name>Driftmier</name>
+		<loc>
+			<lat>38.976108 N</lat>
+			<lon>76.499307 W</lon>
+		</loc>
+	</place>
+	<place>
+		<name>Adrift_F35</name>
+		<loc>
+			<lat>38.772942 N</lat>
+			<lon>76.563227 W</lon>
+		</loc>
+	</place>
+	<place>
+		<name>Earl_Ross_Home</name>
+		<loc>
+			<lat>35.549511 N</lat>
+			<lon>121.072423 W</lon>
+		</loc>
+	</place>
+	<place>
+		<name>Ross_Cabin</name>
+		<loc>
+			<lat>47.271545 N</lat>
+			<lon>122.832661 W</lon>
+		</loc>
+	</place>
+</places>
