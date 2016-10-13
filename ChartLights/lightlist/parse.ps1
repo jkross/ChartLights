@@ -19,6 +19,9 @@ function ParseLatLon($ll)
 		$dd = $d/1.0 + $m/60.0 + $s/(60.0*60.0); $dd
 	} elseif ($ll -match "(\d+\.\d+)( *[NSWE])*") {
 		$dd = $matches[1] / 1.0; $dd
+	} elseif ($ll -match "([-]*\d+\.\d+)") {
+		# only works if point is in same hemisphere as bounding box
+		$dd = [math]::abs($matches[1] / 1.0); $dd
 	} else {
 		Write-Host ("{0}: does not parse" -f $ll)
 		-1;
@@ -28,7 +31,7 @@ function ParseLatLon($ll)
 function getBB($chartFile, $chartNum)
 {
 	[xml]$chart = gc $chartFile;
-	$tc = $chart.charts.chart | where num -match $chartNum;
+	$tc = $chart.charts.chart | where number -match $chartNum;
 	$lats = @($tc.GetElementsByTagName("lat").'#text' | % { parseLatLon $_ } | sort) 
 	$lons = @($tc.GetElementsByTagName("lon").'#text' | % { parseLatLon $_ } | sort) 
 	nno @{lats = $lats; lons = $lons};

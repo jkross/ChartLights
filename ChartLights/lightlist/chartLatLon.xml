@@ -1,35 +1,137 @@
 <charts>
-	<chart>
-		<num>2770</num>
-		<NW>
-			<lat>39-1-5.82N</lat>
-			<lon>76-36-29.84W</lon>
-		</NW>
-		<SE>
-			<lat>38-43-27.33N</lat>
-			<lon>76-3-57.02W</lon>
-		</SE>
-	</chart>
-	<chart>
-		<num>18448</num>
-		<NW>
-			<lat>47-35-59N</lat>
-			<lon>123-11-10W</lon>
-		</NW>
-		<SE>
-			<lat>47-1-58N</lat>
-			<lon>122-10-7W</lon>
-		</SE>
-	</chart>
-	<chart>
-		<num>501</num>
-		<NW>
-			<lat>48-55-53.48N</lat>
-			<lon>128-11-3.68W</lon>
-		</NW>
-		<SE>
-			<lat>32-2-18.05N</lat>
-			<lon>116-50-47.28W</lon>
-		</SE>
-	</chart>
+
+    <chart>
+      <number>12270</number>
+      <name>CHESAPEAKE BAY EASTERN BAY AND SOUTH RIVER</name>
+      <boundingBox>
+    	  <NW>
+    		<lat>39.020118889</lat>
+    		<lon>-76.6078252776</lon>
+    	  </NW>
+    	  <SE>
+    		<lat>38.7232383336</lat>
+    		<lon>-76.0659986115</lon>
+    	  </SE>
+      </boundingBox>
+    </chart>
+
+    <chart>
+      <number>18003</number>
+      <name>CAPE BLANCO TO CAPE FLATTERY</name>
+      <boundingBox>
+    	  <NW>
+    		<lat>49</lat>
+    		<lon>-128.0833333333</lon>
+    	  </NW>
+    	  <SE>
+    		<lat>42.5</lat>
+    		<lon>-120.9166666667</lon>
+    	  </SE>
+      </boundingBox>
+    </chart>
+
+    <chart>
+      <number>18007</number>
+      <name>SAN FRANCISCO TO CAPE FLATTERY</name>
+      <boundingBox>
+    	  <NW>
+    		<lat>49.5</lat>
+    		<lon>-133.9108333333</lon>
+    	  </NW>
+    	  <SE>
+    		<lat>37.4555555556</lat>
+    		<lon>-120.5</lon>
+    	  </SE>
+      </boundingBox>
+    </chart>
+
+    <chart>
+      <number>18020</number>
+      <name>SAN DIEGO TO CAPE MENDOCINO</name>
+      <boundingBox>
+    	  <NW>
+    		<lat>40.5833333333</lat>
+    		<lon>-132.8333333333</lon>
+    	  </NW>
+    	  <SE>
+    		<lat>30.5</lat>
+    		<lon>-116.1666666667</lon>
+    	  </SE>
+      </boundingBox>
+    </chart>
+
+    <chart>
+      <number>18022</number>
+      <name>SAN DIEGO TO SAN FRANCISCO BAY</name>
+      <boundingBox>
+    	  <NW>
+    		<lat>38.0833333333</lat>
+    		<lon>-126.1666666667</lon>
+    	  </NW>
+    	  <SE>
+    		<lat>31.5</lat>
+    		<lon>-116.25</lon>
+    	  </SE>
+      </boundingBox>
+    </chart>
+
+    <chart>
+      <number>18440</number>
+      <name>PUGET SOUND</name>
+      <boundingBox>
+    	  <NW>
+    		<lat>48.3416666667</lat>
+    		<lon>-123.4679111111</lon>
+    	  </NW>
+    	  <SE>
+    		<lat>47.0331527774</lat>
+    		<lon>-122.1512444445</lon>
+    	  </SE>
+      </boundingBox>
+    </chart>
+
+    <chart>
+      <number>18448</number>
+      <name>PUGET SOUND SEATTLE TO OLYMPIA</name>
+      <boundingBox>
+    	  <NW>
+    		<lat>47.5998222224</lat>
+    		<lon>-123.1839527778</lon>
+    	  </NW>
+    	  <SE>
+    		<lat>47.0327500004</lat>
+    		<lon>-122.1679916667</lon>
+    	  </SE>
+      </boundingBox>
+    </chart>
+
+    <chart>
+      <number>18700</number>
+      <name>POINT CONCEPTION TO POINT SUR</name>
+      <boundingBox>
+    	  <NW>
+    		<lat>36.3166444439</lat>
+    		<lon>-122.2843388889</lon>
+    	  </NW>
+    	  <SE>
+    		<lat>34.2166444439</lat>
+    		<lon>-120.4676722222</lon>
+    	  </SE>
+      </boundingBox>
+    </chart>
+
+    <chart>
+      <number>501</number>
+      <name>MEXICAN BORDER TO DIXON ENTRANCE</name>
+      <boundingBox>
+    	  <NW>
+    		<lat>55.5</lat>
+    		<lon>-137.5</lon>
+    	  </NW>
+    	  <SE>
+    		<lat>32</lat>
+    		<lon>-116.5</lon>
+    	  </SE>
+      </boundingBox>
+    </chart>
 </charts>
