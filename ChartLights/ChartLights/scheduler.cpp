@@ -56,7 +56,7 @@ scheduler::dispatch(ticks_t now)
 	while (!isEmpty() && isAnyExpired(now)) {
 		top = timerList.top();						// get the first on the list
 		timerList.pop();							// and remove from the priority list
-		another = top->invoke(now, (_lfsr->next() & 0x1));
+		another = top->invoke(now, _lfsr->nextDurationFuzz());
 		if (another) {								 // re-schedule if requested - invoke set a new time
 			queueTimer(top);
 		}

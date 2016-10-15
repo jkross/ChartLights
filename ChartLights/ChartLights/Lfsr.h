@@ -13,5 +13,7 @@ private:
 	lfsr_val_t	_lfsr;					// current shift register state
 public:
 	lfsr();
-	lfsr_val_t next(void);
+	lfsr_val_t next(void);				// next LFSR value
+	unsigned long nextStartOffset();	// next value scaled to delay-start LEDs
+	unsigned long nextDurationFuzz();
 };

@@ -25,7 +25,7 @@ morseTimer::init(ticks_t start, ledDriver* driver)
 	_driver = driver;
 	ticks = start;
 	_mchar = getCharDesc(_state_char);
-	return true; // invoke(now, 0);
+	return true;									// we set ticks, request scheduling
 }
 
 
@@ -91,7 +91,6 @@ morseTimer::advanceState(void)
 			_state_char = 0;							// start with first letter again
 		}
 		_mchar = getCharDesc(_state_char);				// set the new character's Morse description
-		//SPAB("char: ", _mldp->letters[_state_char]); SPLN();
 	}
 }
 
@@ -111,7 +110,6 @@ morseTimer::invoke(ticks_t now, int fuzz)
 		_driver->set(_mldp->pin, bitval);		// start off setting the bit
 		ticks_t xdur = stepDuration(_state, fuzz);
 		ticks = ticks + xdur;					// our next timer
-		//SPAB("pin", _mldp->pin);  SPAB("bitval: ", bitval); SPAB(" dur: ", xdur); SPLN();
 #ifdef WIN32
 		printf("Pin: %2d %s %7d\n", _mldp->pin, bitval ? "on" : "off", xdur);
 #endif // WIN32
@@ -119,12 +117,6 @@ morseTimer::invoke(ticks_t now, int fuzz)
 	} while (isExpired(now));						// catch up if we need to
 	return true;								// schedule again
 }
-
-//  BUGBUG:  refactor this, removing duplicate in *Timer.cpp
-//  For efficiency we pick a power of two for the # of delay bins (we take modulo of pseudo-random number)
-#define START_BUCKETS	16							// power of 2
-// Spread starts over ~2s
-#define START_FUZZ (2048 / START_BUCKETS)			// make it an even divide
 
 //
 //  Load up all the Morse LED values from our table
@@ -136,7 +128,7 @@ morseTimer::loadPatterns(scheduler* schedp, ledDriver *driverp, lfsr* lfsrp, tic
 {
 	for (int i = 0; i < NUM_MORSE_LIGHT_LIST; i++) {
 		morseTimer *light = new morseTimer(&morseLightList[i]);				// create the timer objectd
-		ticks_t startOffset = (lfsrp->next() % START_BUCKETS) * START_FUZZ;	// compute random start time
+		ticks_t startOffset = lfsrp->nextStartOffset();						// compute random start time
 		if (light->init(now + startOffset, driverp)) {
 			schedp->queueTimer(light);										// queue @ start time
 		}

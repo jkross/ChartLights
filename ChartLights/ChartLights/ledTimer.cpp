@@ -26,10 +26,8 @@ ledTimer::init(ticks_t start, ledDriver* driver)
 {
 	_driver = driver;
 	ticks = start;
-	return true; // invoke(now, 0);
+	return true;									// we set ticks, request scheduling
 }
-
-#define FUZZ	   10
 
 //
 //  Calculate duration for specified step in state machine, adding random fuzz if requested
@@ -38,7 +36,7 @@ ledTimer::init(ticks_t start, ledDriver* driver)
 uint16_t
 ledTimer::stepDuration(int state, int fuzz) {
 	uint16_t duration = uniqueLightSeq[_seqIndex].sequence[state];
-	duration += fuzz ? FUZZ : 0;
+	duration += fuzz;
 	return duration;
 }
 
@@ -59,16 +57,9 @@ ledTimer::invoke(ticks_t now, int fuzz)
 		ticks = ticks + stepDuration(_state, fuzz);	// calculate the next time to be invoked
 
 		_state = (_state + 1) % PATTERN_SEQ_LEN;	// advance the state machine
-		//SPAB("now ", now); SPAB(" pin: ", _ppattern->pin); SPAB(" val: ", bitval); SPAB(" ticks ", ticks); SPLN();
 	} while (isExpired(now));							// catch up if we need to
 	return true;									// schedule again using absolute time in "ticks"
 }
-
-//  BUGBUG:  refactor this, removing duplicate in *Timer.cpp
-//  For efficiency we pick a power of two for the # of delay bins (we take modulo of pseudo-random number)
-#define START_BUCKETS	16							// power of 2
-// Spread starts over ~2s
-#define START_FUZZ (2048 / START_BUCKETS)			// make it an even divide
 
 //
 //  Load up all the LED values from our table
@@ -81,7 +72,7 @@ ledTimer::loadPatterns(scheduler* schedp, ledDriver *driverp, lfsr *lfsrp, ticks
 		//   and skip the couple of lights that are not fixed blinking patterns
 		if (lightList[i].seqId != LIGHT_DESC_NO_BLINK) {
 			ledTimer *light = new ledTimer(i, lightList[i].seqId);				// create the timer object
-			ticks_t startOffset = (lfsrp->next() % START_BUCKETS) * START_FUZZ;	// compute random start time
+			ticks_t startOffset = lfsrp->nextStartOffset();						// compute random start time
 			if (light->init(now + startOffset, driverp)) {
 				schedp->queueTimer(light);										// queue @ start time
 			}
