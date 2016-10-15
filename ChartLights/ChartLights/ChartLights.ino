@@ -54,7 +54,7 @@ loop()
 		myScheduler->dispatch(now);							// Dispatch all expired timers
 		myDriver->writeData();								// Write updated LED pattern
 		now = millis();										// Update current time after dispatch to check for any new expired timers
-	} while (myScheduler->expired(now));					// Continue dispatching while there is any expired timer - expect this to rarely loop
+	} while (myScheduler->isAnyExpired(now));					// Continue dispatching while there is any expired timer - expect this to rarely loop
 	delay(myScheduler->remaining(now));						// Delay until the next timer is due
 }
 

@@ -21,7 +21,6 @@ class Compare {
 
 class scheduler {
     priority_queue<timer *, vector<timer *>, Compare> timerList;			// Ordered queue of timers
-	deque<timer *> expiredDeque;											// Work queue of expired timers
 	lfsr* _lfsr;															// Pseudo-random generator
 
   public:
@@ -29,11 +28,9 @@ class scheduler {
 
     void queueTimer(timer* t);												// Add timer to list of pending timers
 
-    bool empty();															// Query: Are there any pending timers?
+    bool isEmpty();															// Query: Are there any pending timers?
 
-	int size();																// Return number of scheduled timers
-
-	bool expired(ticks_t now);												// Query: Has any timer expired?
+	bool isAnyExpired(ticks_t now);											// Query: Has any timer expired?
 
 	void dispatch(ticks_t now);												// Invoke all expired timers
 

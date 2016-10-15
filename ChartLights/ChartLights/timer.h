@@ -16,6 +16,6 @@ public:
 
 	virtual bool invoke(ticks_t now, int fuzz);		// Called on expiration.  If returns true, re-schedule
 	ticks_t remaining(ticks_t now);					// Time remaining until expiration
-	bool expired(ticks_t now);						// Query: Has timer expired?
+	bool isExpired(ticks_t now);						// Query: Has timer expired?
 
 };

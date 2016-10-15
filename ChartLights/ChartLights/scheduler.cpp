@@ -25,28 +25,19 @@ scheduler::queueTimer(timer* t)
 //  Query for any scheduled timers
 //
 bool
-scheduler::empty()
+scheduler::isEmpty()
 {
 	return timerList.empty();
-}
-
-//
-//  Return the number of scheduled timers
-//
-int
-scheduler::size()
-{
-	return timerList.size();
 }
 
 //
 // Return whether any timer has expired
 //
 bool
-scheduler::expired(ticks_t now)
+scheduler::isAnyExpired(ticks_t now)
 {
 	// Check the first timer...
-	return timerList.top()->expired(now);
+	return timerList.top()->isExpired(now);
 }
 
 //
@@ -55,28 +46,19 @@ scheduler::expired(ticks_t now)
 void
 scheduler::dispatch(ticks_t now)
 {
-	timer *top;
+	timer  *top;
+	bool	another;
+
 	//
-	// First put all the expired timers on their own list
-	//	NB: may not be required given new ordering of timers jkr 16.10.11
-	//
-	while (!timerList.empty() && expired(now)) {
-		top = timerList.top();
-		timerList.pop();
-		expiredDeque.push_front(top);
-	}
-	//
-	// Invoke each expired timer on the expired list, and re-schedule it if the
+	// Invoke each expired and re-schedule it if the
 	// invoke function requests re-scheduling.
 	//
-	while (!expiredDeque.empty()) {
-		top = expiredDeque.back();
-		expiredDeque.pop_back();
-		bool another = top->invoke(now, (_lfsr->next() & 0x1));
+	while (!isEmpty() && isAnyExpired(now)) {
+		top = timerList.top();						// get the first on the list
+		timerList.pop();							// and remove from the priority list
+		another = top->invoke(now, (_lfsr->next() & 0x1));
 		if (another) {								 // re-schedule if requested - invoke set a new time
 			queueTimer(top);
-			//ticks_t next = timerList.top()->ticks; // DBG
-			//lSize = size(); // DBG
 		}
 	}
 }
@@ -88,7 +70,7 @@ ticks_t
 scheduler::remaining(ticks_t now)
 {
 	ticks_t remain = 0;
-	if (!timerList.empty()) {
+	if (!isEmpty()) {
 		timer *top = timerList.top();
 		remain = top->remaining(now);
 	}

@@ -33,7 +33,7 @@ timer::remaining(ticks_t now) {
 //  Query: Has this timer expired?
 //
 bool
-timer::expired(ticks_t now)
+timer::isExpired(ticks_t now)
 {
 	// The global clock wraps after reaching 2^32 ticks.
 	// If the distance between timers is less than "HalfWrap" we consider the timer expired

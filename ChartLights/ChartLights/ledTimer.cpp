@@ -61,7 +61,7 @@ ledTimer::invoke(ticks_t now, int fuzz)
 
 		_state = (_state + 1) % PATTERN_SEQ_LEN;	// advance the state machine
 		//SPAB("now ", now); SPAB(" pin: ", _ppattern->pin); SPAB(" val: ", bitval); SPAB(" ticks ", ticks); SPLN();
-	} while (expired(now));							// catch up if we need to
+	} while (isExpired(now));							// catch up if we need to
 	return true;									// schedule again using absolute time in "ticks"
 }
 

@@ -116,7 +116,7 @@ morseTimer::invoke(ticks_t now, int fuzz)
 		printf("Pin: %2d %s %7d\n", _mldp->pin, bitval ? "on" : "off", xdur);
 #endif // WIN32
 		advanceState();							// advance the state machine
-	} while (expired(now));						// catch up if we need to
+	} while (isExpired(now));						// catch up if we need to
 	return true;								// schedule again
 }
 
