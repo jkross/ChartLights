@@ -4,7 +4,8 @@
 #include <RTClib.h>
 #endif
 #include "perfStat.h"
-#include "timer.h"	
+#include "timer.h"
+#include "lfsr.h"
 #include "scheduler.h"
 #include "ledDriver.h"
 #include "ledTimer.h"
@@ -13,6 +14,7 @@
 
 scheduler *myScheduler;
 ledDriver *myDriver;
+lfsr	  *myLfsr;
 
 #if 0
 #include "rtc.h"
@@ -32,14 +34,15 @@ setup ()
   realTime->setup();
 #endif
 
-  myScheduler = new scheduler();							//  Initialize the LED timing scheduler and the LED driver hardware abstraction
+  myLfsr = new lfsr();										// Pseudo Random generator
+  myScheduler = new scheduler(myLfsr);						// Initialize the LED timing scheduler and the LED driver hardware abstraction
   myDriver = new ledDriver();
   
   ticks_t now = millis();
 
-  ledTimer::loadPatterns(myScheduler, myDriver, now);		// Load up the normal flashing patterns
-  morseTimer::loadPatterns(myScheduler, myDriver, now);		// Load up the lights which flash in Morse code
-  myDriver->writeData();									// Set the initial LED pattern based on the initialization calls 
+  ledTimer::loadPatterns(myScheduler, myDriver, myLfsr, now);	// Load up the normal flashing patterns
+  morseTimer::loadPatterns(myScheduler, myDriver, myLfsr, now);	// Load up the lights which flash in Morse code
+  myDriver->writeData();										// Set the initial LED pattern based on the initialization calls 
 }
 
 // 

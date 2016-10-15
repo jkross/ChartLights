@@ -24,9 +24,9 @@ class scheduler {
 	lfsr* _lfsr;															// Pseudo-random generator
 
   public:
-	scheduler();
+	scheduler(lfsr * lfsrp);
 
-    void queueTimer(timer* t);												// Add timer to list of pending timers
+	void queueTimer(timer* t);												// Add timer to list of pending timers
 
     bool isEmpty();															// Query: Are there any pending timers?
 
@@ -36,7 +36,3 @@ class scheduler {
 
     ticks_t remaining(ticks_t now);											// Return ticks until next timer expiration
 };
-
-
-// ToDo:  	empty -> isEmpty()
-// 			expired -> isAnyExpired()

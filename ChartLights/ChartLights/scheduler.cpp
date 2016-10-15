@@ -7,9 +7,9 @@
 #endif // !WIN32
 #include "scheduler.h"
 
-scheduler::scheduler()
+scheduler::scheduler(lfsr *lfsrp)
 {
-	_lfsr = new lfsr();
+	_lfsr = lfsrp;
 }
 
 //

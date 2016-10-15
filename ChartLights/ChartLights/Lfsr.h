@@ -10,7 +10,6 @@ typedef uint16_t lfsr_val_t;			// NB: change base type if bit width changes
 
 class lfsr {
 private:
-	lfsr_val_t	_start_state;			// BUGBUG: not needed
 	lfsr_val_t	_lfsr;					// current shift register state
 public:
 	lfsr();

@@ -29,7 +29,6 @@ ledTimer::init(ticks_t start, ledDriver* driver)
 	return true; // invoke(now, 0);
 }
 
-#define MULTIPLIER 1				// BUGBUG: todel
 #define FUZZ	   10
 
 //
@@ -75,9 +74,8 @@ ledTimer::invoke(ticks_t now, int fuzz)
 //  Load up all the LED values from our table
 //
 void
-ledTimer::loadPatterns(scheduler* schedp, ledDriver *driverp, ticks_t now)
+ledTimer::loadPatterns(scheduler* schedp, ledDriver *driverp, lfsr *lfsrp, ticks_t now)
 {
-	lfsr *lfsrp = new lfsr();		// BUGBUG: pass in one instance
 	for (int i = 0; i < NUM_LIGHT_LIST; i++) {
 		// Again, to save space, we implicitly set the pin from the table index number
 		//   and skip the couple of lights that are not fixed blinking patterns

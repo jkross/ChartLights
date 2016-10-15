@@ -22,5 +22,5 @@ public:
 	ledTimer(uint8_t pin, int seqIndex);
 	virtual bool init(ticks_t now, ledDriver* driver);
 	virtual bool invoke(ticks_t now, int fuzz);										// called on timer expiration
-	static void loadPatterns(scheduler * schedp, ledDriver * driverp, ticks_t now);	// blinking pattern init
+	static void loadPatterns(scheduler * schedp, ledDriver * driverp, lfsr * lfsrp, ticks_t now);// blinking pattern init
 };

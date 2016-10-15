@@ -60,11 +60,11 @@ morseTimer::getCharDesc(int state_char) {
 //  Decode the compressed tables to get the step duration in MORSE_UNITs
 //
 int
-morseTimer::decodeStateDur() {		// BUGBUG: use explicit parameter, not private state
-	int _pair = _state / 2;			// there are two states in each pair, beginning with the on, then off duration
-	int _half = _state % 2;
-	morseCharOnOff onOff = _mchar->delays[_pair];
-	return _half == 0 ? onOff.on : onOff.off;
+morseTimer::decodeStateDur(uint8_t state) {
+	int pair = state / 2;			// there are two states in each pair, beginning with the on, then off duration
+	int half = state % 2;
+	morseCharOnOff onOff = _mchar->delays[pair];
+	return half == 0 ? onOff.on : onOff.off;
 }
 
 //
@@ -72,7 +72,7 @@ morseTimer::decodeStateDur() {		// BUGBUG: use explicit parameter, not private s
 //
 uint16_t
 morseTimer::stepDuration(int state, int fuzz) {
-	uint16_t duration = MORSE_UNIT * decodeStateDur();
+	uint16_t duration = MORSE_UNIT * decodeStateDur(state);
 	return duration;
 }
 
@@ -84,7 +84,7 @@ void
 morseTimer::advanceState(void)
 {
 	_state++;											// next delay pattern
-	if (decodeStateDur() == MORSE_END) {
+	if (decodeStateDur(_state) == MORSE_END) {
 		_state = 0;
 		_state_char++;									// next character
 		if (_mldp->letters[_state_char] == '\0') {
@@ -132,9 +132,8 @@ morseTimer::invoke(ticks_t now, int fuzz)
 //  	we do fuzz the start time for a "soft" start
 //
 void
-morseTimer::loadPatterns(scheduler* schedp, ledDriver *driverp, ticks_t now)
+morseTimer::loadPatterns(scheduler* schedp, ledDriver *driverp, lfsr* lfsrp, ticks_t now)
 {
-	lfsr *lfsrp = new lfsr();		// BUGBUG: pass in one instance
 	for (int i = 0; i < NUM_MORSE_LIGHT_LIST; i++) {
 		morseTimer *light = new morseTimer(&morseLightList[i]);				// create the timer objectd
 		ticks_t startOffset = (lfsrp->next() % START_BUCKETS) * START_FUZZ;	// compute random start time

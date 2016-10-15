@@ -20,7 +20,8 @@ private:
 
 	int index(char c);							// index into Morse table for given character
 	const morseChar * getCharDesc(int state_char);	// get the Morse character description
-	int decodeStateDur();						// for the given state return number of "morse units" in duration
+	int decodeStateDur(uint8_t state);
+	// for the given state return number of "morse units" in duration
 	uint16_t stepDuration(int state, int fuzz);	// return duration in milliseconds for specified state
 	void advanceState(void);					// advance the state machine
 
@@ -28,5 +29,5 @@ public:
 	morseTimer(morseLightDesc * mldp);
 	virtual bool init(ticks_t now, ledDriver* driver);
 	virtual bool invoke(ticks_t now, int fuzz);										// called on timer expiration
-	static void loadPatterns(scheduler * schedp, ledDriver * driverp, ticks_t now); // blinking pattern init
+	static void loadPatterns(scheduler * schedp, ledDriver * driverp, lfsr * lfsrp, ticks_t now);// blinking pattern init
 };

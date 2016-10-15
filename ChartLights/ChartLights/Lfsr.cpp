@@ -7,7 +7,7 @@
 
 
 lfsr::lfsr() {
-	_start_state = LFSR_START_STATE;	// BUGBUG: should be _lfsr
+	_lfsr = LFSR_START_STATE;			// starting state
 }
 
 lfsr_val_t
