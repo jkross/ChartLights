@@ -89,7 +89,6 @@
     <ClInclude Include="morseLightList.h" />
     <ClInclude Include="morsePatterns.h" />
     <ClInclude Include="morseTimer.h" />
-    <ClInclude Include="snapshotTime.h" />
     <ClInclude Include="ledDriver.h" />
     <ClInclude Include="Lfsr.h">
       <FileType>CppCode</FileType>

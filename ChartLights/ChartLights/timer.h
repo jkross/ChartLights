@@ -2,12 +2,12 @@
 //  Base class for timers of various flavors
 //
 #pragma once
-#include "snapshotTime.h"				// Todo:  incorporate HalfWrap and remove?
+
+typedef unsigned long ticks_t;
+
+const ticks_t HalfWrap = ~((ticks_t)0) >> 1;
 
 class timer {
-protected:
-	snapshotTime *snapp;				// Todo:  remove?
-
 public:
 	ticks_t ticks;						// time next invoke is due
 

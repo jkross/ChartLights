@@ -16,9 +16,9 @@ ledDriver::ledDriver() {
 	pinMode(latchPin, OUTPUT);
 	pinMode(clockPin, OUTPUT);
 	pinMode(dataPin, OUTPUT);
-	pinMode(oePin, OUTPUT);
+	pinMode(pwmPin, OUTPUT);
 	digitalWrite(latchPin, LOW);		// don't latch
-	digitalWrite(oePin, HIGH);			// disable
+	digitalWrite(pwmPin, HIGH);			// disable
 #endif	// !WIN32
 }
 
@@ -38,7 +38,7 @@ ledDriver::setPwm(int pwmPct)
 void
 ledDriver::writeData() {
 #ifndef WIN32
-	digitalWrite(oePin, HIGH); 			// disable LEDs and don't let driver switch to non-standard mode
+	digitalWrite(pwmPin, HIGH); 			// disable LEDs and don't let driver switch to non-standard mode
 	// Shift out starting with last bank, most significant bit
 	for (int bank = NUM_BANKS - 1; bank >= 0; bank--)
 	{
@@ -46,7 +46,7 @@ ledDriver::writeData() {
 	}
 	digitalWrite(latchPin, HIGH); 		// toggle latch pin to latch data from shift register to output drivers
 	digitalWrite(latchPin, LOW);
-	analogWrite(oePin, PWM_PCT_ACT_LOW(_pwmPct));	// set brightness using PWM on ~OE pin
+	analogWrite(pwmPin, PWM_PCT_ACT_LOW(_pwmPct));	// set brightness using PWM on ~OE pin
 #endif // WIN32
 }
 

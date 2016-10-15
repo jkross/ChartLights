@@ -6,7 +6,6 @@
 #endif
 #include "debug.h"
 #include "timer.h"
-#include "snapshotTime.h"
 #include <new>
 
 timer::timer(ticks_t i)

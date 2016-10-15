@@ -39,9 +39,6 @@
     <ClInclude Include="ledDriver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="snapshotTime.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="debug.h">
       <Filter>Header Files</Filter>
     </ClInclude>
